@@ -6,7 +6,6 @@ try:
     GPIO.setwarnings(False)
 
     RASPBERRY = True
-    print('Initialized gpiocontrol for RPi!')
 except:
     RASPBERRY = False
 
