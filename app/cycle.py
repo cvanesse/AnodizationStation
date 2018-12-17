@@ -17,11 +17,14 @@ class Cycle:
         self.allcycleargs.append(arguments)
 
     def pop(self):
-        if len(self.cyclecommands) == 0:
-            self.cyclecommands = self.allcyclecommands
-            self.cycleargs = self.allcycleargs
+        if len(self.cyclecommands) < 1:
+            self.refill()
 
-        command = self.cyclecommands.pop()
-        args = self.cycleargs.pop()
+        command = self.cyclecommands.pop(0)
+        args = self.cycleargs.pop(0)
 
         return command(args)
+
+    def refill(self):
+        self.cyclecommands = self.allcyclecommands.copy()
+        self.cycleargs = self.allcycleargs.copy()
