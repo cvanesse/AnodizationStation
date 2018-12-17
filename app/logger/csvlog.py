@@ -5,8 +5,9 @@ class CSVLog:
 
     wq = []
 
-    def __init__(self, fp):
+    def __init__(self, fp, tagNames):
         self.filepath = fp
+        self.write(self, tagNames)
 
     def queue(self, row):
         self.wq.append(row)
