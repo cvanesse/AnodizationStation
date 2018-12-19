@@ -1,6 +1,6 @@
 #The digipinsensor reads a digital pin onf the Raspberry Pi
 from RPi import GPIO
-from sensor import Sensor
+from .sensor import Sensor
 
 
 class DigiPinSensor(Sensor):

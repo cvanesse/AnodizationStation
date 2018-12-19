@@ -1,6 +1,6 @@
 #This is the wrapper for the ina219 current sensor
 from ina219 import INA219
-from sensor import Sensor
+from .sensor import Sensor
 
 
 class CurrentSensor(Sensor):
