@@ -1,7 +1,7 @@
 #This is a sensor emulator which can be used for testing on a PC
 #It just responds with a random value between 0 and 10
 import random
-from sensor import Sensor
+from .sensor import Sensor
 
 
 class RandomSensor(Sensor):
