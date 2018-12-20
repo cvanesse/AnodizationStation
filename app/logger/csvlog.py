@@ -7,12 +7,12 @@ class CSVLog:
 
     def __init__(self, fp, tagNames):
         self.filepath = fp
-        self.write(self, tagNames)
+        self.write(tagNames)
 
     def queue(self, row):
         self.wq.append(row)
 
-    def writequeue(self):
+    def write_queue(self):
         with open(self.filepath, 'a') as f:
             wr = csv.writer(f)
             wr.writerows(self.wq)
@@ -21,4 +21,4 @@ class CSVLog:
     def write(self, row):
         with open(self.filepath, 'a') as f:
             wr = csv.writer(f)
-            wr.writerows(row)
+            wr.writerow(row)

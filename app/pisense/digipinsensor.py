@@ -1,5 +1,9 @@
 #The digipinsensor reads a digital pin onf the Raspberry Pi
-from RPi import GPIO
+try:
+    from RPi import GPIO
+except RuntimeError:
+    print('Cannot use digipinsensor.')
+
 from .sensor import Sensor
 
 
