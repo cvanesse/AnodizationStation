@@ -41,7 +41,7 @@ class Cell:
     def time_delay(self, seconds):
         start = time.clock()
         now = start
-        while now - start < seconds:
+        while (now - start) < seconds:
             self.log.write([now, self.current_sensor.read()])
             now = time.clock()
 

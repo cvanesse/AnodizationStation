@@ -35,7 +35,7 @@ class CellHandler:
         # TODO: Load and separate a csv file into function names and arguments
         cycle_commands = {
             'call_names': ['set_bus_state', 'time_delay', 'set_bus_state', 'time_delay'],
-            'call_args': [[1], [0.5], [1], [0.5]]
+            'call_args': [1, 0.5, 0, 0.5]
         }
 
         return cycle_commands
@@ -68,7 +68,7 @@ class CellHandler:
         cell.run_cycle(self.num_cycles)
 
     def run(self):
-        self.cell_process = Process(self.run_cell)
+        self.cell_process = Process(target=self.run_cell)
         self.cell_process.run()
 
     def rejoin(self):
