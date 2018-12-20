@@ -23,5 +23,5 @@ class Cell:
 
     def run_cycle(self, numcycles):
         for i in range(numcycles):
-            for j in range(self.cell_cycle.allcyclecommands):
+            for j in range(len(self.cell_cycle.allcyclecommands)):
                 self.cell_cycle.pop()
