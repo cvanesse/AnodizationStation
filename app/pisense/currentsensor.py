@@ -9,7 +9,7 @@ class CurrentSensor(Sensor):
     MAX_EXPECTED_AMPS = 1
 
     def __init__(self, i2c):
-        self.ina = INA219(self.SHUNT, self.MAX_EXPECTED_AMPS)
+        self.ina = INA219(self.SHUNT, self.MAX_EXPECTED_AMPS, address=i2c)
         self.ina.configure(self.ina.RANGE_16V)
         self.ina.sleep()
         Sensor.__init__(self)
