@@ -18,10 +18,13 @@ class Cell:
     ina_address = 0x40
     tag_names = ['Time [s]', 'Current [mA]']
 
-    def __init__(self, buspins, logfile, cycle):
+    def __init__(self, buspins, logfile):
         self.bus = Bus(buspins)
         self.log = CSVLog(logfile, self.tag_names)
         self.current_sensor = CurrentSensor(self.ina_address)
+
+    # This sets the cycle a new cycle object
+    def set_cycle(self, cycle):
         self.cycle = cycle
 
     # To be run on a child process
