@@ -1,0 +1,4 @@
+set_bus_state, 1
+time_delay, 0.5
+set_bus_state, 0
+time_delay, 0.5

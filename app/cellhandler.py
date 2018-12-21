@@ -3,6 +3,7 @@
 from .cell import Cell
 from multiprocessing import Process
 from .cycle import Cycle
+import csv
 
 
 class CellHandler:
@@ -32,10 +33,19 @@ class CellHandler:
         self.num_cycles = numcycles
 
     def parse_cycle_file(self):
-        # TODO: Load and separate a csv file into function names and arguments
+        filename = 'tempfiles/test.cycle'
+
+        C = []
+        A = []
+        with open(filename, 'r') as f:
+            reader = csv.reader(f)
+            for row in reader:
+                C.append(row[0])
+                A.append(row[1])
+
         cycle_commands = {
-            'call_names': ['set_bus_state', 'time_delay', 'set_bus_state', 'time_delay'],
-            'call_args': [1, 0.5, 0, 0.5]
+            'call_names': C,
+            'call_args': A
         }
 
         return cycle_commands
