@@ -4,27 +4,18 @@
 # It will not hold the "runcycle" function, that it a member of the cell class
 class Cycle:
 
-    allcyclecommands = []
-    allcycleargs = []
-    cyclecommands = []
-    cycleargs = []
+    commands = []
+    args = []
 
     def __init__(self):
         pass
 
     def addcommand(self, command, arguments):
-        self.allcyclecommands.append(command)
-        self.allcycleargs.append(arguments)
+        self.commands.append(command)
+        self.args.append(arguments)
 
-    def pop(self):
-        if len(self.cyclecommands) < 1:
-            self.refill()
-
-        command = self.cyclecommands.pop(0)
-        args = self.cycleargs.pop(0)
-
-        return command(args)
-
-    def refill(self):
-        self.cyclecommands = self.allcyclecommands.copy()
-        self.cycleargs = self.allcycleargs.copy()
+    def run(self):
+        for cid in range(len(self.commands)):
+            c = self.commands[cid]
+            a = self.args[cid]
+            c(a)

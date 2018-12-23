@@ -33,8 +33,7 @@ class Cell:
         self.set_bus_state('S')
         self.running_pin.setstate(1)
         for i in range(numcycles):
-            for j in range(len(self.cycle.allcyclecommands)):
-                self.cycle.pop()
+            self.cycle.run()
         self.running_pin.setstate(0)
 
     # Cell.log handles logging the current time and all the sensors of the cell
