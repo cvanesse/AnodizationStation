@@ -61,9 +61,9 @@ class CellHandler:
             call_name = cycle_commands['call_names'][cid]
             call_args = cycle_commands['call_args'][cid]
             if call_name == 'time_delay':
-                cycle.addcommand(Cell.time_delay, call_args)
+                cycle.addcommand(Cell.time_delay, float(call_args))
             elif call_name == 'charge_delay':
-                cycle.addcommand(Cell.charge_delay, call_args)
+                cycle.addcommand(Cell.charge_delay, float(call_args))
             elif call_name == 'set_bus_state':
                 cycle.addcommand(Cell.set_bus_state, call_args)
 
