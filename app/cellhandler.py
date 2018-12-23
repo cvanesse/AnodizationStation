@@ -32,6 +32,9 @@ class CellHandler:
     def set_num_cycles(self, numcycles):
         self.num_cycles = numcycles
 
+    def set_running_pin(self, runningpin):
+        self.running_pin = runningpin
+
     def parse_cycle_file(self):
         filename = 'tempfiles/test.cycle'
 
@@ -68,7 +71,7 @@ class CellHandler:
 
     # This creates a Cell object
     def make_cell(self):
-        cell = Cell(self.bus_pins, self.log_file)
+        cell = Cell(self.running_pin, self.bus_pins, self.log_file)
         cell_cycle = self.load_cycle(cell)
         cell.set_cycle(cell_cycle)
         return cell
