@@ -15,6 +15,12 @@ class CellHandler:
     cell_process = []
 
     def __init__(self):
+        #Default values for testing
+        self.running_pin = 7
+        self.bus_pins = [11, 15]
+        self.cycle_file('tempfiles/test.cycle')
+        self.num_cycles(2)
+        self.log_file('tempfiles/test.csv')
         pass
 
     # This sets self.cycle_file
@@ -36,11 +42,9 @@ class CellHandler:
         self.running_pin = runningpin
 
     def parse_cycle_file(self):
-        filename = 'tempfiles/test.cycle'
-
         C = []
         A = []
-        with open(filename, 'r') as f:
+        with open(self.cycle_file, 'r') as f:
             reader = csv.reader(f)
             for row in reader:
                 C.append(row[0])
