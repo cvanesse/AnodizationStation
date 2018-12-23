@@ -4,7 +4,7 @@
 #   A Cycle
 #       All Cycle management functions
 from .cycle import Cycle
-from .gpiocontrol import Bus
+from .gpiocontrol import Bus, Pin
 from .logger import CSVLog
 from .pisense import CurrentSensor
 import time
@@ -18,8 +18,9 @@ class Cell:
     ina_address = 0x40
     tag_names = ['Time [s]', 'Current [mA]']
 
-    def __init__(self, buspins, logfile):
+    def __init__(self, runningpin, buspins, logfile):
         self.bus = Bus(buspins)
+        self.running_pin = Pin(runningpin)
         self.log = CSVLog(logfile, self.tag_names)
         self.current_sensor = CurrentSensor(self.ina_address)
 
@@ -29,9 +30,12 @@ class Cell:
 
     # To be run on a child process
     def run_cycle(self, numcycles):
+        self.set_bus_state('S')
+        self.running_pin.setstate(1)
         for i in range(numcycles):
             for j in range(len(self.cycle.allcyclecommands)):
                 self.cycle.pop()
+        self.running_pin.setstate(0)
 
     # Cell.log handles logging the current time and all the sensors of the cell
     def log(self):
@@ -64,7 +68,11 @@ class Cell:
 
     # Cell.set_bus_state sets the bus to the configured state
     def set_bus_state(self, sid):
-        if sid == 1:
-            self.bus.setstate([1, 1, 1, 1])
-        else:
-            self.bus.setstate([0, 0, 0, 0])
+        if sid == "S":
+            self.bus.setstate([0, 0])
+        elif sid == "A":
+            self.bus.setstate([1, 0])
+        elif sid == "B":
+            self.bus.setstate([0, 1])
+        elif sid == "C":
+            self.bus.setstate([1, 1])

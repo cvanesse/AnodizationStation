@@ -1,4 +1,8 @@
-set_bus_state, 1
+set_bus_state, S
 time_delay, 0.5
-set_bus_state, 0
+set_bus_state, A
+time_delay, 0.5
+set_bus_state, B
+time_delay, 0.5
+set_bus_state, C
 time_delay, 0.5
