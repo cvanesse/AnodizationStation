@@ -83,6 +83,7 @@ class CellHandler:
     def run(self):
         self.cell_process = Process(target=self.run_cell)
         self.cell_process.run()
+        self.cell_process.join()
 
     def rejoin(self):
         self.cell_process.join()
