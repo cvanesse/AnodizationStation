@@ -21,14 +21,13 @@ class CellHandler:
     # Cell State Variables
     cell_progress = []
 
-    def __init__(self):
-        # Default values for testing
-        self.running_pin = 7
-        self.bus_pins = [11, 15]
-        self.cycle_file = 'tempfiles/test.cycle'
-        self.num_cycles = 2
-        self.log_file = 'tempfiles/test.csv'
-        self.cycle_parameters = ["0.5", "0.5", "0.5", "0.5", "S", "A", "B", "C"]
+    def __init__(self, cellconfig):
+        self.running_pin = cellconfig["running_pin"]
+        self.bus_pins = cellconfig["bus_pins"]
+        self.cycle_file = ''
+        self.num_cycles = 0
+        self.log_file = ''
+        self.cycle_parameters = []
 
     # This sets the cycle file which will be interpretted and passed to the cell when CellHandler.run() is called
     def set_cycle(self, newcycle):
@@ -38,17 +37,9 @@ class CellHandler:
     def set_log_file(self, newlog):
         self.log_file = newlog
 
-    # This sets the pins which the cell will be initialized with when CellHandler.run() is called
-    def set_bus_pins(self, newpins):
-        self.bus_pins = newpins
-
     # This sets the number of cycles which is passed to the cell when CellHandler.run() is called
     def set_num_cycles(self, numcycles):
         self.num_cycles = numcycles
-
-    # This sets the pin which outputs the "running" signal to the cell
-    def set_running_pin(self, runningpin):
-        self.running_pin = runningpin
 
     # This sets the parameters which will be used while parsing the .cycle file
     def set_cycle_parameters(self, params):
@@ -68,10 +59,15 @@ class CellHandler:
 
     # Starts a cell process with a pipe to communicate with it
     def run(self):
-        [self.handler_pipe, cell_pipe] = Pipe(True)
-        self.handler_pipe.send(False)
-        self.cell_process = Process(target=self.run_cell, args=[cell_pipe])
-        self.cell_process.start()
+        if not (len(self.cycle_file) == 0 or len(self.log_file) == 0 or len(self.cycle_parameters) == 0 or self.num_cycles == 0):
+            [self.handler_pipe, cell_pipe] = Pipe(True)
+            self.handler_pipe.send(False)
+            self.cell_process = Process(target=self.run_cell, args=[cell_pipe])
+            self.cell_process.start()
+            return True
+        else:
+            RuntimeError("CellHandler not prepared! Please define all necessary parameters before running.")
+            return False
 
     # This checks for the progress of the cell.
     def check_cell(self):
