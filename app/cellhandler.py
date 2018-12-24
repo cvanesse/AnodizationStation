@@ -87,7 +87,7 @@ class CellHandler:
 
     # Tries to rejoin the cell process. Returns false if it cant
     def try_join(self):
-        if self.cell_process.is_alive():
+        if not self.cell_process.is_alive():
             self.cell_process.join()
             return True
         else:
