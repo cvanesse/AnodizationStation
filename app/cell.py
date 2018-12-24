@@ -2,7 +2,7 @@ from .gpiocontrol import Bus, Pin
 from .logger import CSVLog
 from .pisense import CurrentSensor
 import time
-from threading import Thread, Semaphore
+from threading import Thread
 
 
 # The Cell should be created within the same subprocess that runs Cell.run_cycle
@@ -17,11 +17,17 @@ class Cell:
     keep_sensing = False
     current = []
 
-    def __init__(self, runningpin, buspins, logfile):
+    # We need a way to communicate with the CellHandler, and a state variable for various signals
+    cell_pipe = []
+    die = []
+
+    def __init__(self, runningpin, buspins, logfile, cellpipe):
         self.bus = Bus(buspins)
         self.running_pin = Pin(runningpin)
         self.log = CSVLog(logfile, self.tag_names)
         self.current_sensor = CurrentSensor(self.ina_address)
+        self.cell_pipe = cellpipe
+        self.die = False
 
     # This sets the cycle a new cycle object
     def set_cycle(self, cycle):
@@ -38,17 +44,21 @@ class Cell:
 
         for i in range(numcycles):
             self.cycle.run()
+            self.cell_pipe.send(float(i)/float(numcycles))
 
         self.keep_sensing = False
         sensor_thread.join()
 
         self.running_pin.setstate(0)
 
+    # The loop run on the designated sensing thread
     def sensor_loop(self):
         while self.keep_sensing:
             now = time.clock()
             self.current = self.current_sensor.read()
             self.log.write([now, self.current])
+            if self.cell_pipe.poll():
+                self.die = self.cell_pipe.recv()
 
     # Cell.log handles logging the current time and all the sensors of the cell
     def log(self):
@@ -58,7 +68,7 @@ class Cell:
     def time_delay(self, seconds):
         start = time.clock()
         now = start
-        while (now - start) < seconds:
+        while not self.die and (now - start):
             now = time.clock()
 
     # Cell.charge_delay does a charge delay for the given amount of seconds while still logging
@@ -67,7 +77,7 @@ class Cell:
         then = time.clock()
         then_current = self.current_sensor.read()
 
-        while charge < total_charge:
+        while not self.die and charge < total_charge:
             now = time.clock()
             now_current = self.current
             charge += (now_current + then_current) * (now - then) / 2
@@ -76,11 +86,12 @@ class Cell:
 
     # Cell.set_bus_state sets the bus to the configured state
     def set_bus_state(self, sid):
-        if sid == "S":
-            self.bus.setstate([0, 0])
-        elif sid == "A":
-            self.bus.setstate([1, 0])
-        elif sid == "B":
-            self.bus.setstate([0, 1])
-        elif sid == "C":
-            self.bus.setstate([1, 1])
+        if not self.die:
+            if sid == "S":
+                self.bus.setstate([0, 0])
+            elif sid == "A":
+                self.bus.setstate([1, 0])
+            elif sid == "B":
+                self.bus.setstate([0, 1])
+            elif sid == "C":
+                self.bus.setstate([1, 1])

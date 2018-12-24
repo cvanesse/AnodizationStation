@@ -1,18 +1,25 @@
 # The cell handler is the API for handling Cell initialization and running
 
 from .cell import Cell
-from multiprocessing import Process
+from multiprocessing import Process, Pipe
 from .cycle import Cycle
 import csv
 
 
 class CellHandler:
 
+    # Cell Settings
     num_cycles = 0
     cycle_file = ''
     bus_pins = []
     log_file = ''
+
+    # Multiprocessing variables
     cell_process = []
+    handler_pipe = []
+
+    # Cell State Variables
+    cell_progress = []
 
     def __init__(self):
         #Default values for testing
@@ -21,6 +28,7 @@ class CellHandler:
         self.cycle_file = 'tempfiles/test.cycle'
         self.num_cycle = 2
         self.log_file = 'tempfiles/test.csv'
+        self.cell_progress = 0
         pass
 
     # This sets self.cycle_file
@@ -74,19 +82,33 @@ class CellHandler:
         return cycle
 
     # This creates a Cell object
-    def make_cell(self):
-        cell = Cell(self.running_pin, self.bus_pins, self.log_file)
+    def make_cell(self, cellpipe):
+        cell = Cell(self.running_pin, self.bus_pins, self.log_file, cellpipe)
         cell_cycle = self.load_cycle(cell)
         cell.set_cycle(cell_cycle)
         return cell
 
-    def run_cell(self):
-        cell = self.make_cell()
+    # This runs make_cell and cell.run_cycle(), needs to be run on a child process
+    def run_cell(self, cellpipe):
+        cell = self.make_cell(cellpipe)
         cell.run_cycle(self.num_cycles)
 
+    # Starts a cell process with a pipe to communicate with it
     def run(self):
-        self.cell_process = Process(target=self.run_cell)
+        [self.handler_pipe, cell_pipe] = Pipe(True)
+        self.cell_process = Process(target=self.run_cell, args=cell_pipe)
         self.cell_process.start()
 
+    def check_cell(self):
+        if self.handler_pipe.poll():
+            self.cell_progress = self.handler_pipe.recv()
+            return self.cell_progress
+        else:
+            return self.cell_progress
+
+    def kill(self):
+        self.handler_pipe.send(True)
+
+    # Rejoins the cell process
     def rejoin(self):
         self.cell_process.join()
