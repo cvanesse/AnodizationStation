@@ -1,14 +1,8 @@
-# The base cell class holds:
-#   A Bus
-#   A CSVLog for logging
-#   A Cycle
-#       All Cycle management functions
-from .cycle import Cycle
 from .gpiocontrol import Bus, Pin
 from .logger import CSVLog
 from .pisense import CurrentSensor
 import time
-from multiprocessing import Process
+from threading import Thread, Semaphore
 
 
 # The Cell should be created within the same subprocess that runs Cell.run_cycle
@@ -17,6 +11,11 @@ class Cell:
     # These will eventually be set during initialization of the program
     ina_address = 0x40
     tag_names = ['Time [s]', 'Current [mA]']
+
+    # We read sensors and log data on a separate thread from the control thread
+    sensor_thread = []
+    keep_sensing = False
+    current = []
 
     def __init__(self, runningpin, buspins, logfile):
         self.bus = Bus(buspins)
@@ -32,9 +31,24 @@ class Cell:
     def run_cycle(self, numcycles):
         self.set_bus_state('S')
         self.running_pin.setstate(1)
+
+        sensor_thread = Thread(target=self.sensor_loop)
+        self.keep_sensing = True
+        sensor_thread.start()
+
         for i in range(numcycles):
             self.cycle.run()
+
+        self.keep_sensing = False
+        sensor_thread.join()
+
         self.running_pin.setstate(0)
+
+    def sensor_loop(self):
+        while self.keep_sensing:
+            now = time.clock()
+            self.current = self.current_sensor.read()
+            self.log.write([now, self.current])
 
     # Cell.log handles logging the current time and all the sensors of the cell
     def log(self):
@@ -45,7 +59,6 @@ class Cell:
         start = time.clock()
         now = start
         while (now - start) < seconds:
-            self.log.write([now, self.current_sensor.read()])
             now = time.clock()
 
     # Cell.charge_delay does a charge delay for the given amount of seconds while still logging
@@ -55,13 +68,9 @@ class Cell:
         then_current = self.current_sensor.read()
 
         while charge < total_charge:
-
             now = time.clock()
-            now_current = self.current_sensor.read()
-
+            now_current = self.current
             charge += (now_current + then_current) * (now - then) / 2
-            self.log.write([now, now_current])
-
             then = now
             then_current = now_current
 

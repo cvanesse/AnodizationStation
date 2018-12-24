@@ -18,9 +18,9 @@ class CellHandler:
         #Default values for testing
         self.running_pin = 7
         self.bus_pins = [11, 15]
-        self.cycle_file('tempfiles/test.cycle')
-        self.num_cycles(2)
-        self.log_file('tempfiles/test.csv')
+        self.cycle_file = 'tempfiles/test.cycle'
+        self.num_cycle = 2
+        self.log_file = 'tempfiles/test.csv'
         pass
 
     # This sets self.cycle_file
