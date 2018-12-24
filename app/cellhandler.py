@@ -28,7 +28,6 @@ class CellHandler:
         self.cycle_file = 'tempfiles/test.cycle'
         self.num_cycle = 2
         self.log_file = 'tempfiles/test.csv'
-        self.cell_progress = 0
         pass
 
     # This sets self.cycle_file
@@ -96,6 +95,7 @@ class CellHandler:
     # Starts a cell process with a pipe to communicate with it
     def run(self):
         [self.handler_pipe, cell_pipe] = Pipe(True)
+        self.handler_pipe.send(False)
         self.cell_process = Process(target=self.run_cell, args=cell_pipe)
         self.cell_process.start()
 

@@ -27,6 +27,7 @@ class Cell:
         self.log = CSVLog(logfile, self.tag_names)
         self.current_sensor = CurrentSensor(self.ina_address)
         self.cell_pipe = cellpipe
+        self.cell_pipe.send(-1)
         self.die = False
 
     # This sets the cycle a new cycle object
@@ -44,7 +45,7 @@ class Cell:
 
         for i in range(numcycles):
             self.cycle.run()
-            self.cell_pipe.send(float(i)/float(numcycles))
+            self.cell_pipe.send(i)
 
         self.keep_sensing = False
         sensor_thread.join()
@@ -68,7 +69,7 @@ class Cell:
     def time_delay(self, seconds):
         start = time.clock()
         now = start
-        while not self.die and (now - start):
+        while not self.die and (now - start) < seconds:
             now = time.clock()
 
     # Cell.charge_delay does a charge delay for the given amount of seconds while still logging
