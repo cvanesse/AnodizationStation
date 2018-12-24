@@ -16,3 +16,5 @@ def run():
 
     # Start the webserver
     start_webserver()
+
+    return cellhandlers
