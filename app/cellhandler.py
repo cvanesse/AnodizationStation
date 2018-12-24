@@ -11,6 +11,8 @@ class CellHandler:
     num_cycles = 0
     cycle_file = ''
     bus_pins = []
+    running_pin = []
+    button_pin = []
     log_file = ''
     cycle_parameters = []
 
@@ -24,6 +26,7 @@ class CellHandler:
     def __init__(self, cellconfig):
         self.running_pin = cellconfig["running_pin"]
         self.bus_pins = cellconfig["bus_pins"]
+        self.button_pin = cellconfig["button_pin"]
         self.cycle_file = ''
         self.num_cycles = 0
         self.log_file = ''
@@ -47,7 +50,7 @@ class CellHandler:
 
     # This creates a Cell object
     def make_cell(self, cellpipe):
-        cell = Cell(self.running_pin, self.bus_pins, self.log_file, cellpipe)
+        cell = Cell(self.running_pin, self.bus_pins, self.button_pin, self.log_file, cellpipe)
         cell_cycle = load_cycle(cell, self.cycle_file, self.cycle_parameters)
         cell.set_cycle(cell_cycle)
         return cell

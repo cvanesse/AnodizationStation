@@ -18,3 +18,6 @@ class DigiPinSensor(Sensor):
 
     def read(self):
         return GPIO.input(self.pinID)
+
+    def add_callback(self, cbfunction):
+        GPIO.add_event_detect(self.pinID, GPIO.RISING, callback=cbfunction)

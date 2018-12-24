@@ -14,6 +14,8 @@ def run():
     for cid in range(len(CELL_PARAMETERS)):
         cellhandlers.append(CellHandler(CELL_PARAMETERS[cid]))
 
+
+
     # Start the webserver
     start_webserver()
 

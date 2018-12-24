@@ -1,6 +1,6 @@
 from .gpiocontrol import Bus, Pin
 from .logger import CSVLog
-from .pisense import CurrentSensor
+from .pisense import CurrentSensor, DigiPinSensor
 import time
 from threading import Thread
 
@@ -21,9 +21,11 @@ class Cell:
     cell_pipe = []
     die = []
 
-    def __init__(self, runningpin, buspins, logfile, cellpipe):
+    def __init__(self, runningpin, buspins, buttonpin, logfile, cellpipe):
         self.bus = Bus(buspins)
         self.running_pin = Pin(runningpin)
+        self.button = DigiPinSensor(buttonpin)
+        self.button.add_callback(self.kill)
         self.log = CSVLog(logfile, self.tag_names)
         self.current_sensor = CurrentSensor(self.ina_address)
         self.cell_pipe = cellpipe
@@ -97,3 +99,6 @@ class Cell:
                 self.bus.setstate([0, 1])
             elif sid == "C":
                 self.bus.setstate([1, 1])
+
+    def kill(self):
+        self.die = True

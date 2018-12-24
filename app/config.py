@@ -3,5 +3,6 @@ CELL_PARAMETERS = []
 
 CELL_PARAMETERS.append({
     "running_pin": 7,
-    "bus_pins": [11, 15]
+    "bus_pins": [11, 15],
+    "button_pin": 19
 })
