@@ -12,6 +12,7 @@ class CellHandler:
     cycle_file = ''
     bus_pins = []
     log_file = ''
+    cycle_parameters = []
 
     # Multiprocessing variables
     cell_process = []
@@ -27,6 +28,7 @@ class CellHandler:
         self.cycle_file = 'tempfiles/test.cycle'
         self.num_cycle = 2
         self.log_file = 'tempfiles/test.csv'
+        self.cycle_parameters = ["0.5", "0.5", "0.5", "0.5", "S", "A", "B", "C"]
 
     # This sets the cycle file which will be interpretted and passed to the cell when CellHandler.run() is called
     def set_cycle(self, newcycle):
@@ -48,10 +50,14 @@ class CellHandler:
     def set_running_pin(self, runningpin):
         self.running_pin = runningpin
 
+    # This sets the parameters which will be used while parsing the .cycle file
+    def set_cycle_parameters(self, params):
+        self.cycle_parameters = params.copy()
+
     # This creates a Cell object
     def make_cell(self, cellpipe):
         cell = Cell(self.running_pin, self.bus_pins, self.log_file, cellpipe)
-        cell_cycle = load_cycle(cell, self.cycle_file)
+        cell_cycle = load_cycle(cell, self.cycle_file, self.cycle_parameters)
         cell.set_cycle(cell_cycle)
         return cell
 
