@@ -32,7 +32,7 @@ def parse_cycle_file(filename, parameters):
         parameter_names = []
 
         line1 = reader.__next__()
-        if line1[0] == "Parameters Names:":
+        if line1[0] == "Parameter Names:":
             # Here we need to define the local parameter variables which will hold inputs,
             # then check that we have the right amount of inputs
             for col in range(len(line1)):

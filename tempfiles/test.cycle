@@ -1,4 +1,4 @@
-parameters,time1,time2,time3,time4,state1,state2,state3,state4
+Parameter Names:,time1,time2,time3,time4,state1,state2,state3,state4
 set_bus_state,state1
 time_delay,time1
 set_bus_state,state2
