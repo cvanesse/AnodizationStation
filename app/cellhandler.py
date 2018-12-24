@@ -96,12 +96,13 @@ class CellHandler:
     def run(self):
         [self.handler_pipe, cell_pipe] = Pipe(True)
         self.handler_pipe.send(False)
-        self.cell_process = Process(target=self.run_cell, args=cell_pipe)
+        self.cell_process = Process(target=self.run_cell, args=[cell_pipe])
         self.cell_process.start()
 
     def check_cell(self):
         if self.handler_pipe.poll():
-            self.cell_progress = self.handler_pipe.recv()
+            while self.handler_pipe.poll():
+                self.cell_progress = self.handler_pipe.recv()
             return self.cell_progress
         else:
             return self.cell_progress
