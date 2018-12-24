@@ -53,6 +53,7 @@ class Cell:
         self.running_pin.setstate(0)
 
     # The loop run on the designated sensing thread
+    # The sensing thread handles reading sensors and checking for a kill signal from the CellHandler
     def sensor_loop(self):
         while self.keep_sensing:
             now = time.clock()

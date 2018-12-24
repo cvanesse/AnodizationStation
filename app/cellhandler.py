@@ -2,8 +2,7 @@
 
 from .cell import Cell
 from multiprocessing import Process, Pipe
-from .cycle import Cycle
-import csv
+from .cycle import load_cycle
 
 
 class CellHandler:
@@ -22,68 +21,37 @@ class CellHandler:
     cell_progress = []
 
     def __init__(self):
-        #Default values for testing
+        # Default values for testing
         self.running_pin = 7
         self.bus_pins = [11, 15]
         self.cycle_file = 'tempfiles/test.cycle'
         self.num_cycle = 2
         self.log_file = 'tempfiles/test.csv'
-        pass
 
-    # This sets self.cycle_file
+    # This sets the cycle file which will be interpretted and passed to the cell when CellHandler.run() is called
     def set_cycle(self, newcycle):
         self.cycle_file = newcycle
 
-    # This sets self.log_file
+    # This sets the log file which the cell will write to
     def set_log_file(self, newlog):
         self.log_file = newlog
 
-    # This sets self.bus_pins
+    # This sets the pins which the cell will be initialized with when CellHandler.run() is called
     def set_bus_pins(self, newpins):
         self.bus_pins = newpins
 
+    # This sets the number of cycles which is passed to the cell when CellHandler.run() is called
     def set_num_cycles(self, numcycles):
         self.num_cycles = numcycles
 
+    # This sets the pin which outputs the "running" signal to the cell
     def set_running_pin(self, runningpin):
         self.running_pin = runningpin
-
-    def parse_cycle_file(self):
-        C = []
-        A = []
-        with open(self.cycle_file, 'r') as f:
-            reader = csv.reader(f)
-            for row in reader:
-                C.append(row[0])
-                A.append(row[1])
-
-        cycle_commands = {
-            'call_names': C,
-            'call_args': A
-        }
-
-        return cycle_commands
-
-    # This turns the cycle_file into a list of commands and parameters bound to the Cell object
-    def load_cycle(self, Cell):
-        cycle = Cycle()
-        cycle_commands = self.parse_cycle_file()
-        for cid in range(len(cycle_commands['call_names'])):
-            call_name = cycle_commands['call_names'][cid]
-            call_args = cycle_commands['call_args'][cid]
-            if call_name == 'time_delay':
-                cycle.addcommand(Cell.time_delay, float(call_args))
-            elif call_name == 'charge_delay':
-                cycle.addcommand(Cell.charge_delay, float(call_args))
-            elif call_name == 'set_bus_state':
-                cycle.addcommand(Cell.set_bus_state, call_args)
-
-        return cycle
 
     # This creates a Cell object
     def make_cell(self, cellpipe):
         cell = Cell(self.running_pin, self.bus_pins, self.log_file, cellpipe)
-        cell_cycle = self.load_cycle(cell)
+        cell_cycle = load_cycle(cell, self.cycle_file)
         cell.set_cycle(cell_cycle)
         return cell
 
@@ -99,6 +67,7 @@ class CellHandler:
         self.cell_process = Process(target=self.run_cell, args=[cell_pipe])
         self.cell_process.start()
 
+    # This checks for the progress of the cell.
     def check_cell(self):
         if self.handler_pipe.poll():
             while self.handler_pipe.poll():
@@ -110,6 +79,10 @@ class CellHandler:
     def kill(self):
         self.handler_pipe.send(True)
 
-    # Rejoins the cell process
-    def rejoin(self):
-        self.cell_process.join()
+    # Tries to rejoin the cell process. Returns false if it cant
+    def try_join(self):
+        if not self.cell_process.is_alive():
+            self.cell_process.join()
+            return True
+        else:
+            return False
