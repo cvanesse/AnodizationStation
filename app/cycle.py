@@ -23,14 +23,35 @@ class Cycle:
 
 
 # This parses a cycle file
-def parse_cycle_file(filename):
+def parse_cycle_file(filename, parameters):
     c = []
     a = []
     with open(filename, 'r') as f:
         reader = csv.reader(f)
+
+        parameter_names = []
+
+        line1 = reader.read()
+        if line1[0] == "Parameters Names:":
+            # Here we need to define the local parameter variables which will hold inputs,
+            # then check that we have the right amount of inputs
+            for col in range(len(line1)):
+                if not col == 0:
+                    parameter_names.append(line1[col])
+
+            if not len(parameter_names) == len(parameters):
+                ValueError("Parameter number mismatch! len(parameters) must equal len(parameter_names)")
+        else:
+            c.append(line1[0])
+            a.append(line1[1])
+
         for row in reader:
             c.append(row[0])
-            a.append(row[1])
+            if not len(parameter_names) == 0 and row[1] in parameter_names:
+                pid = parameter_names.index(row[1])
+                a.append(parameters[pid])
+            else:
+                a.append(row[1])
 
     cycle_commands = {
         'call_names': c,
@@ -41,9 +62,9 @@ def parse_cycle_file(filename):
 
 
 # This turns the cycle_file into a list of commands and parameters bound to the Cell object
-def load_cycle(cell, filename):
+def load_cycle(cell, filename, parameters):
     cycle = Cycle()
-    cycle_commands = parse_cycle_file(filename)
+    cycle_commands = parse_cycle_file(filename, parameters)
     for cid in range(len(cycle_commands['call_names'])):
         call_name = cycle_commands['call_names'][cid]
         call_args = cycle_commands['call_args'][cid]
