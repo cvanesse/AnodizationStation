@@ -26,7 +26,7 @@ class CellHandler:
         self.running_pin = 7
         self.bus_pins = [11, 15]
         self.cycle_file = 'tempfiles/test.cycle'
-        self.num_cycle = 2
+        self.num_cycles = 2
         self.log_file = 'tempfiles/test.csv'
         self.cycle_parameters = ["0.5", "0.5", "0.5", "0.5", "S", "A", "B", "C"]
 
@@ -82,6 +82,7 @@ class CellHandler:
         else:
             return self.cell_progress
 
+    # This tells the cell to die, so that it doesn't finish in the middle of an operation and corrupt anything.
     def kill(self):
         self.handler_pipe.send(True)
 

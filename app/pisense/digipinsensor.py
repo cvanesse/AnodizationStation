@@ -1,4 +1,4 @@
-#The digipinsensor reads a digital pin onf the Raspberry Pi
+# The digipinsensor reads a digital pin on the Raspberry Pi
 try:
     from RPi import GPIO
 except RuntimeError:
