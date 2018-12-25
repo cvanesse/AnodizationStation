@@ -100,5 +100,5 @@ class Cell:
             elif sid == "C":
                 self.bus.setstate([1, 1])
 
-    def kill(self):
+    def kill(self, channel):
         self.die = True
