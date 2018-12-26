@@ -18,4 +18,5 @@ def run():
     os.environ["FLASK_APP"] = "app/flaskapp.py"
     os.system("flask run")
 
+    # Return cellhandlers for testing purposes
     return cellhandlers
