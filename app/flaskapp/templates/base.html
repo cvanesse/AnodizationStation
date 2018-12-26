@@ -8,10 +8,10 @@
     <title>The Anodization Station: {{ title }}</title>
     {% else %}
     <title>The Anodization Station</title>
-    {% endif %}}
+    {% endif %}
     <link rel="stylesheet"
         type="text/css"
-        href="stylesheets/base.css" />
+        href="{{ url_for('static', filename='styles/base.css') }}" />
 </head>
 <body>
     <div class="header">
@@ -19,9 +19,9 @@
     </div>
 
     <div class="navbar">
-        <a>Cell Control</a>
-        <a>Cycles</a>
-        <a>Log Files</a>
+        <a href="/cellcontrol">Cell Control</a>
+        <a href="/cycles">Cycles</a>
+        <a href="/logs">Log Files</a>
     </div>
 
     {% block content %}{% endblock %}
