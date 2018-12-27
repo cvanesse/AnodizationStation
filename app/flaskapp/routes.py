@@ -28,9 +28,15 @@ def cell_control():
     cell_id = int(vals['cell_id'])
     num_cycles = int(vals['num_cycles'])
     STATION.cell_handlers[cell_id].set_num_cycles(num_cycles)
+    #STATION.cell_handlers[cell_id].try_join()
     success = STATION.cell_handlers[cell_id].run()
     if success:
-        return "Running cell #" + str(cell_id) + " for " + str(num_cycles) + " cycles"
+        return render_template("cellbox.html", cellhandler=STATION.cell_handlers[cell_id])
     else:
         return "Error!"
 
+@FLASK_APP.route('/get_cellbox', methods=['GET'])
+def get_cellbox():
+    vals = request.values
+    cell_id = int(vals['cell_id'])
+    return render_template("cellbox.html", cellhandler=STATION.cell_handlers[cell_id])

@@ -11,26 +11,8 @@
 
 
 {% macro cell(cellhandler) %}
-<div class="cellbox">
-    <h2>Cell #{{ cellhandler.cellID }}</h2>
-    <hr>
-    {% if cellhandler.cell_process.is_alive() %}
-        {{ cell_running(cellhandler) }}
-    {% else %}
-        {{ cell_waiting(cellhandler) }}
-    {% endif %}
+<div class="cellbox", id="cellbox_{{cellhandler.cellID}}">
+    {% include "cellbox.html" %}
 </div>
 {% endmacro %}
 
-<!--- This is for a cell which is currently running. -->
-{% macro cell_running(cellhandler) %}
-<h3>Running: {{ 100*cellhandler.check_cell() }}%</h3>
-{% endmacro %}
-
-<!--- This is for a cell which is not currently running -->
-{% macro cell_waiting(cellhandler) %}
-<h3>Waiting...</h3>
-<hr>
-Number of Cycles: <input type="text" id="num_cycles_{{ cellhandler.cellID }}"><br>
-<input type="button" value="Run" onclick=run_cell({{ cellhandler.cellID }})>
-{% endmacro %}

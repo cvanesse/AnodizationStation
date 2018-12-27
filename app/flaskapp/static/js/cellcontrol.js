@@ -7,7 +7,7 @@ function run_cell(cell_id) {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4) {
             if (this.status == 200) {
-                alert(this.responseText);
+                document.getElementById("cellbox_" + cell_id).innerHTML = this.responseText;
             } else{
                 alert(this.status);
             }

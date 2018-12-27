@@ -47,7 +47,7 @@ class Cell:
 
         for i in range(numcycles):
             self.cycle.run()
-            self.cell_pipe.send((i + 1)/numcycles)
+            self.cell_pipe.send(i + 1)
 
         self.keep_sensing = False
         sensor_thread.join()
