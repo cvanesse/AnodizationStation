@@ -1,8 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-    <h1>This will be the cell control menu!</h1>
-    <p>Within this menu, the user will be able to configure, start, stop, and monitor their anodizations.</p>
-
+    {% for ch in cellhandlers %}
+        <div class="column">
+            {{ cell(ch) }}
+        </div>
+    {% endfor %}
 {% endblock %}
+
+
+{% macro cell(cellhandler) %}
+<div class="cellbox">
+    <h2>Cell #{{ cellhandler.running_pin }}</h2>
+    <hr>
+    {% if cellhandler.cell_process.is_alive() %}
+        {{ cell_running(cellhandler) }}
+    {% else %}
+        {{ cell_waiting(cellhandler) }}
+    {% endif %}
+</div>
+{% endmacro %}
+
+<!--- This is for a cell which is currently running. -->
+{% macro cell_running(cellhandler) %}
+<h3>Running...</h3>
+{% endmacro %}
+
+<!--- This is for a cell which is not currently running -->
+{% macro cell_waiting(cellhandler) %}
+<h3>Waiting...</h3>
+{% endmacro %}

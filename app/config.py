@@ -6,3 +6,21 @@ CELL_PARAMETERS.append({
     "bus_pins": [11, 15],
     "button_pin": 19
 })
+
+CELL_PARAMETERS.append({
+    "running_pin": 1,
+    "bus_pins": [11, 15],
+    "button_pin": 19
+})
+
+CELL_PARAMETERS.append({
+    "running_pin": 19,
+    "bus_pins": [11, 15],
+    "button_pin": 19
+})
+
+CELL_PARAMETERS.append({
+    "running_pin": 100,
+    "bus_pins": [11, 15],
+    "button_pin": 19
+})

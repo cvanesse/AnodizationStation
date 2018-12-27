@@ -31,6 +31,7 @@ class CellHandler:
         self.num_cycles = 0
         self.log_file = ''
         self.cycle_parameters = []
+        self.cell_process = Process(target=self.run_cell)
 
     # This sets the cycle file which will be interpretted and passed to the cell when CellHandler.run() is called
     def set_cycle(self, newcycle):
