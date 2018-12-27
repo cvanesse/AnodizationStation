@@ -1,5 +1,5 @@
 from ..flaskapp import FLASK_APP
-from flask import render_template, request
+from flask import render_template, request, json
 from ..station import Station
 
 STATION = Station()
@@ -21,10 +21,16 @@ def logs():
     title = "Logs"
     return render_template("logs.html", title=title)
 
-@FLASK_APP.route('/cellcontrol', methods=['POST'])
+
+@FLASK_APP.route('/run_cell', methods=['POST'])
 def cell_control():
-    cell_id = request.args['cell_id']
-    num_cycles = request.args['num_cycles']
+    vals = request.values
+    cell_id = int(vals['cell_id'])
+    num_cycles = int(vals['num_cycles'])
     STATION.cell_handlers[cell_id].set_num_cycles(num_cycles)
     success = STATION.cell_handlers[cell_id].run()
-    return success
+    if success:
+        return "Running cell #" + str(cell_id) + " for " + str(num_cycles) + " cycles"
+    else:
+        return "Error!"
+

@@ -5,18 +5,15 @@ function run_cell(cell_id) {
 
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
-        if (this.readyState === 4) {
-            if (this.response === true) {
-                alert('Running Cell #' + cell_id + " for " + num_cycles +  " cycles");
-                window.location.reload(true);
-            } else {
-                alert("Failed!");
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                alert(this.responseText);
+            } else{
+                alert(this.status);
             }
-
         }
     };
-    xhttp.open("POST", "/cellcontrol");
-    xhttp.setRequestHeader("cell_id", cell_id);
-    xhttp.setRequestHeader("num_cycles", num_cycles);
-    xhttp.send()
+    xhttp.open("POST", "/run_cell", true);
+    xhttp.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+    xhttp.send("cell_id=" + cell_id + "&num_cycles=" + num_cycles);
 }
