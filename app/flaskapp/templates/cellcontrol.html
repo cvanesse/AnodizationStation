@@ -24,7 +24,7 @@
 
 <!--- This is for a cell which is currently running. -->
 {% macro cell_running(cellhandler) %}
-<h3>Running: {{ cellhandler.cell_progress }}%</h3>
+<h3>Running: {{ 100*cellhandler.check_cell() }}%</h3>
 {% endmacro %}
 
 <!--- This is for a cell which is not currently running -->
