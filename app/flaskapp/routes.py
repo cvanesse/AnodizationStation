@@ -24,11 +24,24 @@ def logs():
 
 
 @FLASK_APP.route('/run_cell', methods=['POST'])
-def cell_control():
+def run_cell():
     vals = request.values
     cell_id = int(vals['cell_id'])
     num_cycles = int(vals['num_cycles'])
+    cycle_id = int(vals['cycle_id'])
+
+    all_cycle_info = get_all_cycle_info()
+    cycle_file = all_cycle_info[cycle_id]['filename']
+    cycle_param_names = all_cycle_info[cycle_id]['parameters']
+
+    cycle_params = []
+    for pid in range(len(cycle_param_names)):
+        cycle_params.append(vals[cycle_param_names[pid]])
+
     STATION.cell_handlers[cell_id].set_num_cycles(num_cycles)
+    STATION.cell_handlers[cell_id].set_cycle(cycle_file)
+    STATION.cell_handlers[cell_id].set_cycle_parameters(cycle_params)
+
     success = STATION.cell_handlers[cell_id].run()
     if success:
         return render_template("cellbox.html", cellhandler=STATION.cell_handlers[cell_id], all_cycle_info=get_all_cycle_info(), cid=0)
@@ -45,6 +58,20 @@ def get_cycle_names():
             cycle_name_list = cycle_name_list + ',' + all_cycle_info[cid]['displayname']
 
     return cycle_name_list
+
+
+@FLASK_APP.route('/get_cycle_param_names', methods=['POST'])
+def get_cycle_params():
+    vals = request.values
+    cycle_id = int(vals['cycle_id'])
+    params = get_all_cycle_info()[cycle_id]['parameters']
+    param_list = params[0]
+    for pid in range(len(params)):
+        if pid is not 0:
+            param_list = param_list + "," + params[pid]
+
+    return param_list
+
 
 @FLASK_APP.route('/get_cycle_param_display', methods=['POST'])
 def get_cycle_param_display():
