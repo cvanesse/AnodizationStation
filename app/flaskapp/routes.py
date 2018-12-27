@@ -26,4 +26,5 @@ def cell_control():
     cell_id = request.args['cell_id']
     num_cycles = request.args['num_cycles']
     STATION.cell_handlers[cell_id].set_num_cycles(num_cycles)
-    STATION.cell_handlers[cell_id].run()
+    success = STATION.cell_handlers[cell_id].run()
+    return success

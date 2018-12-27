@@ -30,7 +30,7 @@ class CellHandler:
         self.button_pin = cellconfig["button_pin"]
         self.cellID = cid
         self.cycle_file = cellconfig["cycle_file"]
-        self.num_cycles = 0
+        self.num_cycles = 5
         self.log_file = cellconfig["log_file"]
         self.cycle_parameters = cellconfig["cycle_params"]
         self.cell_process = Process(target=self.run_cell)

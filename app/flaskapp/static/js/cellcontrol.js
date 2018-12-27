@@ -6,8 +6,13 @@ function run_cell(cell_id) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState === 4) {
-            alert('Running Cell #' + cell_id + " for " + num_cycles +  " cycles");
-            window.location.reload(true);
+            if (this.response === true) {
+                alert('Running Cell #' + cell_id + " for " + num_cycles +  " cycles");
+                window.location.reload(true);
+            } else {
+                alert("Failed!");
+            }
+
         }
     };
     xhttp.open("POST", "/cellcontrol");
