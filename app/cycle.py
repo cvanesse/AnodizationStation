@@ -1,5 +1,6 @@
 # The cycles file will handle everything to do with cycles
 import csv
+import glob
 
 
 # It will not hold the "runcycle" function, that it a member of the cell class
@@ -31,19 +32,20 @@ def parse_cycle_file(filename, parameters):
 
         parameter_names = []
 
-        line1 = reader.__next__()
-        if line1[0] == "Parameter Names:":
+        line1 = reader.__next__() # Skip the first line, it's just the display name of the cycle
+        line2 = reader.__next__()
+        if line2[0] == "Parameter Names:":
             # Here we need to define the local parameter variables which will hold inputs,
             # then check that we have the right amount of inputs
-            for col in range(len(line1)):
+            for col in range(len(line2)):
                 if not col == 0:
-                    parameter_names.append(line1[col])
+                    parameter_names.append(line2[col])
 
             if not len(parameter_names) == len(parameters):
                 ValueError("Parameter number mismatch! len(parameters) must equal len(parameter_names)")
         else:
-            c.append(line1[0])
-            a.append(line1[1])
+            c.append(line2[0])
+            a.append(line2[1])
 
         for row in reader:
             c.append(row[0])
@@ -76,3 +78,40 @@ def load_cycle(cell, filename, parameters):
             cycle.addcommand(cell.set_bus_state, call_args)
 
     return cycle
+
+
+# This gets the file and display names of all the .cycle files in tempfiles/cycles
+def get_all_cycle_info():
+    all_cycle_files = glob.glob('tempfiles/cycles/*.cycle')
+    all_cycle_info = []
+    for fid in range(len(all_cycle_files)):
+        file = all_cycle_files[fid]
+        cycle_info = get_cycle_info(file)
+        all_cycle_info.append({
+            'filename': file,
+            'displayname': cycle_info[0],
+            'parameters': cycle_info[1]
+        })
+
+    return all_cycle_info
+
+
+# This gets the info of a single .cycle file, including the parameters it needs and it's display name
+def get_cycle_info(filename):
+    with open(filename, 'r') as f:
+        reader = csv.reader(f)
+
+        parameter_names = []
+
+        line1 = reader.__next__()
+        display_name = line1[0]
+
+        line2 = reader.__next__()
+        if line2[0] == "Parameter Names:":
+            # Here we need to define the local parameter variables which will hold inputs,
+            # then check that we have the right amount of inputs
+            for col in range(len(line2)):
+                if not col == 0:
+                    parameter_names.append(line2[col])
+
+        return [display_name, parameter_names]
