@@ -22,8 +22,6 @@ function run_cell(cell_id) {
                     form_string = form_string + "&" + param_list[pid] + "=" + param_vals[pid];
                 }
 
-                alert(form_string);
-
                 var xhttp2 = new XMLHttpRequest();
                 xhttp2.onreadystatechange = function() {
                     if (this.readyState == 4) {
