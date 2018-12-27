@@ -22,7 +22,7 @@ class CellHandler:
     handler_pipe = []
 
     # Cell State Variables
-    cell_progress = []
+    cell_progress = 0
 
     def __init__(self, cellconfig, cid):
         self.running_pin = cellconfig["running_pin"]
