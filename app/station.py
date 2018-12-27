@@ -9,4 +9,4 @@ class Station:
 
     def __init__(self):
         for cid in range(len(CELL_PARAMETERS)):
-            self.cell_handlers.append(CellHandler(CELL_PARAMETERS[cid]))
+            self.cell_handlers.append(CellHandler(CELL_PARAMETERS[cid], cid))

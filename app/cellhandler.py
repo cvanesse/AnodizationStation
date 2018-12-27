@@ -15,6 +15,7 @@ class CellHandler:
     button_pin = []
     log_file = ''
     cycle_parameters = []
+    cellID = -1
 
     # Multiprocessing variables
     cell_process = []
@@ -23,10 +24,11 @@ class CellHandler:
     # Cell State Variables
     cell_progress = []
 
-    def __init__(self, cellconfig):
+    def __init__(self, cellconfig, cid):
         self.running_pin = cellconfig["running_pin"]
         self.bus_pins = cellconfig["bus_pins"]
         self.button_pin = cellconfig["button_pin"]
+        self.cellID = cid
         self.cycle_file = ''
         self.num_cycles = 0
         self.log_file = ''
