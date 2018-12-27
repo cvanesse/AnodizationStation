@@ -28,7 +28,6 @@ def cell_control():
     cell_id = int(vals['cell_id'])
     num_cycles = int(vals['num_cycles'])
     STATION.cell_handlers[cell_id].set_num_cycles(num_cycles)
-    #STATION.cell_handlers[cell_id].try_join()
     success = STATION.cell_handlers[cell_id].run()
     if success:
         return render_template("cellbox.html", cellhandler=STATION.cell_handlers[cell_id])

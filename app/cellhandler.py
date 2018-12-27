@@ -68,6 +68,7 @@ class CellHandler:
         if not (len(self.cycle_file) == 0 or len(self.log_file) == 0 or len(self.cycle_parameters) == 0 or self.num_cycles == 0):
             [self.handler_pipe, cell_pipe] = Pipe(True)
             self.handler_pipe.send(False)
+            self.try_join()
             self.cell_process = Process(target=self.run_cell, args=[cell_pipe])
             self.cell_process.start()
             return True
@@ -90,7 +91,7 @@ class CellHandler:
 
     # Tries to rejoin the cell process. Returns false if it cant
     def try_join(self):
-        if not self.cell_process.is_alive():
+        if (not self.cell_process.is_alive()) and (self.cell_process.pid is not None):
             self.cell_process.join()
             return True
         else:
