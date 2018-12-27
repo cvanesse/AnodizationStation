@@ -10,7 +10,7 @@ STATION = Station()
 @FLASK_APP.route('/cellcontrol', methods=['GET'])
 def index():
     title = 'Cell Control'
-    return render_template("cellcontrol.html", title=title, cellhandlers=STATION.cell_handlers, cycle_info=get_all_cycle_info())
+    return render_template("cellcontrol.html", title=title, cellhandlers=STATION.cell_handlers, all_cycle_info=get_all_cycle_info(), cid=0)
 
 @FLASK_APP.route('/cycles')
 def cycles():
@@ -31,7 +31,7 @@ def cell_control():
     STATION.cell_handlers[cell_id].set_num_cycles(num_cycles)
     success = STATION.cell_handlers[cell_id].run()
     if success:
-        return render_template("cellbox.html", cellhandler=STATION.cell_handlers[cell_id], cycle_names=get_all_cycle_info())
+        return render_template("cellbox.html", cellhandler=STATION.cell_handlers[cell_id], all_cycle_info=get_all_cycle_info(), cid=0)
     else:
         return "Error!"
 
@@ -45,3 +45,10 @@ def get_cycle_names():
             cycle_name_list = cycle_name_list + ',' + all_cycle_info[cid]['displayname']
 
     return cycle_name_list
+
+@FLASK_APP.route('/get_cycle_param_display', methods=['POST'])
+def get_cycle_param_display():
+    vals = request.values
+    cycle_id = int(vals['cycle_id'])
+    cell_id = int(vals['cell_id'])
+    return render_template('cycleparams.html', cellhandler=STATION.cell_handlers[cell_id], all_cycle_info=get_all_cycle_info(), cid=cycle_id)

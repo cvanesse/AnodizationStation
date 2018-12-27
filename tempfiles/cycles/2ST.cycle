@@ -1,0 +1,6 @@
+2-State Time Cycle
+Parameter Names:,time1,time2,state1,state2
+set_bus_state,state1
+time_delay,time1
+set_bus_state,state2
+time_delay,time2

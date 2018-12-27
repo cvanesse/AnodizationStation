@@ -7,12 +7,17 @@
 {% macro cell_waiting(cellhandler) %}
 <h3>Waiting...</h3>
 <hr>
-<select name="cycle_type">
-    {% for cyc in cycle_info %}
+<select id="cycle_select_{{cellhandler.cellID}}" onchange=update_cellbox({{ cellhandler.cellID }})>
+    {% for cyc in all_cycle_info %}
     <option value="{{cyc['displayname']}}">{{cyc['displayname']}}</option>
     {% endfor %}
 </select><br><br>
-Number of Cycles: <input type="text" id="num_cycles_{{ cellhandler.cellID }}"><br>
+
+<div id="cycleparams_{{cellhandler.cellID}}">
+    {% include "cycleparams.html" %}
+</div>
+
+Number of Cycles: <input type="text" id="num_cycles_{{ cellhandler.cellID }}"><br><br>
 <input type="button" value="Run" onclick=run_cell({{ cellhandler.cellID }})>
 {% endmacro %}
 

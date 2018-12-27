@@ -1,0 +1,5 @@
+<!--  cycleparams.html is a template which is housed within a cellbox, it holds all the input boxes for cycle parameters -->
+
+{% for param in all_cycle_info[cid]['parameters'] %}
+{{param}}: <input type="text" id="{{param}}_{{ cellhandler.cellID }}"><br>
+{% endfor %}

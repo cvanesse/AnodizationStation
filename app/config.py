@@ -6,6 +6,6 @@ CELL_PARAMETERS.append({
     "bus_pins": [11, 15],
     "button_pin": 19,
     "log_file": "tempfiles/tlog.csv",
-    "cycle_file": "tempfiles/test.cycle",
+    "cycle_file": "tempfiles/4ST.cycle",
     "cycle_params": ["0.5", "0.5", "0.5", "0.5", "S", "A", "B", "C"]
 })
