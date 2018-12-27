@@ -29,10 +29,10 @@ class CellHandler:
         self.bus_pins = cellconfig["bus_pins"]
         self.button_pin = cellconfig["button_pin"]
         self.cellID = cid
-        self.cycle_file = ''
+        self.cycle_file = cellconfig["cycle_file"]
         self.num_cycles = 0
-        self.log_file = ''
-        self.cycle_parameters = []
+        self.log_file = cellconfig["log_file"]
+        self.cycle_parameters = cellconfig["cycle_params"]
         self.cell_process = Process(target=self.run_cell)
 
     # This sets the cycle file which will be interpretted and passed to the cell when CellHandler.run() is called
