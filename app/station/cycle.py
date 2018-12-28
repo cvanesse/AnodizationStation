@@ -80,9 +80,9 @@ def load_cycle(cell, filename, parameters):
     return cycle
 
 
-# This gets the file and display names of all the .cycle files in tempfiles/cycles
+# This gets the file and display names of all the .cycle files in files/cycles
 def get_all_cycle_info():
-    all_cycle_files = glob.glob('tempfiles/cycles/*.cycle')
+    all_cycle_files = glob.glob('../files/cycles/*.cycle')
     all_cycle_info = []
     for fid in range(len(all_cycle_files)):
         file = all_cycle_files[fid]

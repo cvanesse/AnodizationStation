@@ -1,0 +1,1 @@
+from app import FLASK_APP
