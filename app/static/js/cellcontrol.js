@@ -51,7 +51,9 @@ function render_cellbox(cell_id) {
                     setwaiting(cell_id)
                     render_cycle_parameters(0, cell_id);
                 } else {
-                    setTimeout(render_cellbox(cell_id), 20000)
+                    setTimeout(function() {
+                        render_cellbox(cell_id);
+                    }, 20000)
                 }
             }
         }
