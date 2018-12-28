@@ -29,7 +29,7 @@ class Cell:
         self.log = CSVLog(logfile, self.tag_names)
         self.current_sensor = CurrentSensor(self.ina_address)
         self.cell_pipe = cellpipe
-        self.cell_pipe.send(-1)
+        self.cell_pipe.send(0)
         self.die = False
 
     # This sets the cycle a new cycle object

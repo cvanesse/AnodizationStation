@@ -23,8 +23,7 @@ function run_cell(cell_id) {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4) {
             if (this.status == 200) {
-                alert(this.responseText);
-                render_cellbox(cell_id);
+                setTimeout(render_cellbox(cell_id), 15);
             }
         }
     };

@@ -57,7 +57,6 @@ def get_json():
 @FLASK_APP.route('/run_cell', methods=['POST'])
 def run_cell():
     info = request.get_json()
-    print(info)
     cycle_id = info['cycle_id']
     cell_id = info['cell_id']
     cycle_params = info['cycle_params']
