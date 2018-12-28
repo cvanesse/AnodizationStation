@@ -46,7 +46,7 @@ def run_cell():
     num_cycles = int(vals['num_cycles'])
     cycle_id = int(vals['cycle_id'])
 
-    cycle_file = CYCLE_INFO[cycle_id]['filename']
+    cycle_file = CYCLE_INFO[cycle_id]['file']
     cycle_param_names = CYCLE_INFO[cycle_id]['parameters']
 
     cycle_params = []
@@ -66,10 +66,10 @@ def run_cell():
 
 @FLASK_APP.route('/get_cycle_names', methods=['POST'])
 def get_cycle_names():
-    cycle_name_list = CYCLE_INFO[0]['displayname']
+    cycle_name_list = CYCLE_INFO[0]['name']
     for cid in range(len(CYCLE_INFO)):
         if cid is not 0:
-            cycle_name_list = cycle_name_list + ',' + CYCLE_INFO[cid]['displayname']
+            cycle_name_list = cycle_name_list + ',' + CYCLE_INFO[cid]['name']
 
     return cycle_name_list
 
