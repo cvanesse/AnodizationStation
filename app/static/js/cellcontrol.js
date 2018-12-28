@@ -46,11 +46,12 @@ function render_cellbox(cell_id) {
         if (this.readyState == 4) {
             if (this.status == 200) {
                 document.getElementById("cellbox_" + cell_id).innerHTML = this.responseText;
-                if (window.RUNNING[cell_id]) {
-                    setTimeout(render_cellbox(cell_id), 20000)
-                } else{
+                status_text = document.getElementById("status_" + cell_id).innerText;
+                if (status_text == "Waiting...") {
+                    setwaiting(cell_id)
                     render_cycle_parameters(0, cell_id);
-
+                } else {
+                    setTimeout(render_cellbox(cell_id), 20000)
                 }
             }
         }
