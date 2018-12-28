@@ -7,13 +7,13 @@ function init() {
 
 function run_cell(cell_id) {
     var info = {
-        "num_cycles": document.getElementById("num_cycles_" + cell_id).value,
+        "num_cycles": parseInt(document.getElementById("num_cycles_" + cell_id).value),
         "cell_id": cell_id,
         "cycle_id": document.getElementById("cycle_select_" + cell_id).selectedIndex,
         "cycle_params": []
     };
 
-    for (pid = 0; pid < window.CYCLE_INFO[info["cycle_id"]]; pid++) {
+    for (pid = 0; pid < window.CYCLE_INFO[info.cycle_id].parameters.length; pid++) {
         pname = window.CYCLE_INFO[info.cycle_id].parameters[pid];
         info["cycle_params"].push(document.getElementById(pname + "_" + cell_id).value);
     }

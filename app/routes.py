@@ -22,8 +22,6 @@ STATION = Station(CELL_CONFIG)
 @FLASK_APP.route('/cellcontrol', methods=['GET'])
 def render_cell_control():
     title = 'Cell Control'
-    json_cycle_info = json.dumps(CYCLE_INFO, ensure_ascii=False)
-    json_cell_config = json.dumps(CELL_CONFIG, ensure_ascii=False)
     return render_template("cellcontrol.html", title=title, cell_config=CELL_CONFIG, json_cycle_info=CYCLE_INFO, json_cell_config=CELL_CONFIG)
 
 
@@ -59,6 +57,7 @@ def get_json():
 @FLASK_APP.route('/run_cell', methods=['POST'])
 def run_cell():
     info = request.get_json()
+    print(info)
     cycle_id = info['cycle_id']
     cell_id = info['cell_id']
     cycle_params = info['cycle_params']
