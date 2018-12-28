@@ -1,6 +1,7 @@
 function init() {
     // Then, we render all of the cells (which is done asynchronously)
     for (cid = 0; cid < window.CELL_CONFIG.length; cid++) {
+        setwaiting(cid);
         render_cellbox(cid)
     }
 }
@@ -23,7 +24,14 @@ function run_cell(cell_id) {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4) {
             if (this.status == 200) {
-                setTimeout(render_cellbox(cell_id), 15);
+                if (this.responseText == "Cell started.") {
+                    setrunning(cell_id);
+                    setTimeout(render_cellbox(cell_id), 15);
+                } else {
+                    setwaiting(cell_id);
+                    setTimeout(render_cellbox(cell_id), 15);
+                }
+
             }
         }
     };
@@ -39,7 +47,11 @@ function render_cellbox(cell_id) {
         if (this.readyState == 4) {
             if (this.status == 200) {
                 document.getElementById("cellbox_" + cell_id).innerHTML = this.responseText;
-                render_cycle_parameters(0, cell_id);
+                if (window.RUNNING[cell_id]) {
+                    setTimeout(render_cellbox(cell_id), 5000)
+                } else{
+                    render_cycle_parameters(0, cell_id);
+                }
             }
         }
     };
@@ -67,4 +79,12 @@ function render_cycle_parameters(cycle_id, cell_id) {
 function update_cycle_parameters(cell_id) {
     cycle_id = document.getElementById("cycle_select_" + cell_id).selectedIndex;
     render_cycle_parameters(cycle_id, cell_id);
+}
+
+function setrunning(cell_id) {
+    window.RUNNING[cell_id] = true;
+}
+
+function setwaiting(cell_id) {
+    window.RUNNING[cell_id] = false;
 }
