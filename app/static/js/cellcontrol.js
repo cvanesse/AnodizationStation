@@ -53,7 +53,7 @@ function render_cellbox(cell_id) {
                 } else {
                     setTimeout(function() {
                         render_cellbox(cell_id);
-                    }, 20000)
+                    }, 5000)
                 }
             }
         }
