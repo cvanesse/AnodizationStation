@@ -31,7 +31,6 @@ function run_cell(cell_id) {
                     setwaiting(cell_id);
                     setTimeout(render_cellbox(cell_id), 15);
                 }
-
             }
         }
     };
@@ -48,9 +47,10 @@ function render_cellbox(cell_id) {
             if (this.status == 200) {
                 document.getElementById("cellbox_" + cell_id).innerHTML = this.responseText;
                 if (window.RUNNING[cell_id]) {
-                    setTimeout(render_cellbox(cell_id), 5000)
+                    setTimeout(render_cellbox(cell_id), 20000)
                 } else{
                     render_cycle_parameters(0, cell_id);
+
                 }
             }
         }

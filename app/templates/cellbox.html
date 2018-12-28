@@ -5,7 +5,7 @@
 
 <!--- This is for a cell which is not currently running -->
 {% macro cell_waiting(cell_id, cell_config, cell_handler) %}
-    <script> setwaiting({{cell_id}}) </script>
+    <script onload="setwaiting( {{cell_id}} )"></script>
     <h3>Waiting...</h3>
     <hr>
 
