@@ -1,5 +1,4 @@
 # The cell handler is the API for handling Cell initialization and running
-
 from .cell import Cell
 from multiprocessing import Process, Pipe
 from .cycle import load_cycle

@@ -1,5 +1,9 @@
-<!--  cycleparams.html is a template which is housed within a cellbox, it holds all the input boxes for cycle parameters -->
+<select id="cycle_select_{{ cell_id }}" onchange="update_cycle_parameters( {{ cell_id }} )">
+    {% for cyc in all_cycle_info %}
+        <option value="{{ cyc['name'] }}">{{ cyc['name'] }}</option>
+    {% endfor %}
+</select><br><br>
 
-{% for param in all_cycle_info[cid]['parameters'] %}
-{{param}}: <input type="text" id="{{param}}_{{ cellhandler.cellID }}"><br>
+{% for param in all_cycle_info[cycle_id]['parameters'] %}
+    {{ param }}: <input type="text" id="{{ param }}_{{ cell_id }}"><br>
 {% endfor %}

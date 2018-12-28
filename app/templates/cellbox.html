@@ -1,30 +1,24 @@
 <!--- This is for a cell which is currently running. -->
-{% macro cell_running(cellhandler) %}
+{% macro cell_running(cell_id, cell_config, cell_handler) %}
 <h3>Running: {{ cellhandler.check_cell() }} / {{ cellhandler.num_cycles }} Cycles</h3>
 {% endmacro %}
 
 <!--- This is for a cell which is not currently running -->
-{% macro cell_waiting(cellhandler) %}
-<h3>Waiting...</h3>
-<hr>
-<select id="cycle_select_{{cellhandler.cellID}}" onchange=update_cellbox({{ cellhandler.cellID }})>
-    {% for cyc in all_cycle_info %}
-    <option value="{{cyc['name']}}">{{cyc['name']}}</option>
-    {% endfor %}
-</select><br><br>
+{% macro cell_waiting(cell_id, cell_config, cell_handler) %}
+    <h3>Waiting...</h3>
+    <hr>
 
-<div id="cycleparams_{{cellhandler.cellID}}">
-    {% include "cycleparams.html" %}
-</div>
+    <div id="cycleparams_{{ cell_id }}">
+    </div>
 
-Number of Cycles: <input type="text" id="num_cycles_{{ cellhandler.cellID }}"><br><br>
-<input type="button" value="Run" onclick=run_cell({{ cellhandler.cellID }})>
+    Number of Cycles: <input type="text" id="num_cycles_{{ cell_id }}"><br><br>
+    <input type="button" value="Run" onclick=run_cell({{ cell_id }})>
 {% endmacro %}
 
-<h2>Cell #{{ cellhandler.cellID }}</h2>
+<h2>Cell #{{ cell_id }}</h2>
 <hr>
-{% if cellhandler.cell_process.is_alive() %}
-    {{ cell_running(cellhandler) }}
+{% if cell_handler.cell_process.is_alive() %}
+    {{ cell_running(cell_id, cell_config, cell_handler) }}
 {% else %}
-    {{ cell_waiting(cellhandler) }}
+    {{ cell_waiting(cell_id, cell_config, cell_handler) }}
 {% endif %}

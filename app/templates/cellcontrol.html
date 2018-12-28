@@ -2,17 +2,15 @@
 
 {% block content %}
     <script type="text/javascript" src="{{ url_for('static', filename='js/cellcontrol.js') }}"></script>
-    {% for ch in cellhandlers %}
-        <div class="column">
-            {{ cell(ch) }}
+    <script type="text/javascript" >
+        window.CELL_CONFIG = {{ json_cell_config|tojson }};
+        window.CYCLE_INFO = {{ json_cycle_info|tojson }};
+        init();
+    </script>
+
+    {% for cid in range(cell_config|length) %}
+        <div class="cellbox" id="cellbox_{{ cid }}">
         </div>
     {% endfor %}
 {% endblock %}
-
-
-{% macro cell(cellhandler) %}
-<div class="cellbox", id="cellbox_{{cellhandler.cellID}}">
-    {% include "cellbox.html" %}
-</div>
-{% endmacro %}
 

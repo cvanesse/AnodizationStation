@@ -1,65 +1,71 @@
-// cellcontrol.js holds all the functionality for the cellcontrol.html view
+function init() {
+    // Then, we render all of the cells (which is done asynchronously)
+    for (cid = 0; cid < window.CELL_CONFIG.length; cid++) {
+        render_cellbox(cid)
+    }
+}
 
 function run_cell(cell_id) {
-    num_cycles = document.getElementById('num_cycles_' + cell_id).value;
-    cycle_id = document.getElementById("cycle_select_" + cell_id).selectedIndex;
+    var info = {
+        "num_cycles": document.getElementById("num_cycles_" + cell_id).value,
+        "cell_id": cell_id,
+        "cycle_id": document.getElementById("cycle_select_" + cell_id).selectedIndex,
+        "cycle_params": []
+    };
 
-    var xhttp = new XMLHttpRequest();
+    for (pid = 0; pid < window.CYCLE_INFO[info["cycle_id"]]; pid++) {
+        pname = window.CYCLE_INFO[info.cycle_id].parameters[pid];
+        info["cycle_params"].push(document.getElementById(pname + "_" + cell_id).value);
+    }
+
+    // Asynchronously tell the server to start the cell, then update the cellbox
+    xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4) {
             if (this.status == 200) {
-                param_list = this.responseText.split(',');
-
-                param_vals = [];
-                for(pid = 0; pid < param_list.length; pid++){
-                    pdocindex = param_list[pid] + "_" + cell_id;
-                    param_vals.push(document.getElementById(pdocindex).value);
-                }
-
-                form_string = "cell_id=" + cell_id + "&num_cycles=" + num_cycles + "&cycle_id=" + cycle_id;
-
-                for(pid = 0; pid < param_list.length; pid++){
-                    form_string = form_string + "&" + param_list[pid] + "=" + param_vals[pid];
-                }
-
-                var xhttp2 = new XMLHttpRequest();
-                xhttp2.onreadystatechange = function() {
-                    if (this.readyState == 4) {
-                        if (this.status == 200) {
-                            document.getElementById("cellbox_" + cell_id).innerHTML = this.responseText;
-                        } else{
-                            alert(this.status);
-                        }
-                    }
-                };
-                xhttp2.open("POST", "/run_cell", true);
-                xhttp2.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-                xhttp2.send(form_string);
-
-            } else{
-                alert(this.status);
+                alert(this.responseText);
+                render_cellbox(cell_id);
             }
         }
     };
-    xhttp.open("POST", "/get_cycle_param_names", true);
-    xhttp.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-    xhttp.send("cycle_id=" + cycle_id);
+    xhttp.open("POST", "/run_cell", true);
+    xhttp.setRequestHeader('content-type', 'application/json; charset=UTF-8');
+    xhttp.send(JSON.stringify(info));
 }
 
-function update_cellbox(cell_id) {
-    cycle_id = document.getElementById("cycle_select_" + cell_id).selectedIndex;
+function render_cellbox(cell_id) {
+    // Asynchronously fetch the rendered HTML for this cell_id
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                document.getElementById("cellbox_" + cell_id).innerHTML = this.responseText;
+                render_cycle_parameters(0, cell_id);
+            }
+        }
+    };
+    xhttp.open("POST", "/render", true);
+    xhttp.setRequestHeader('content-type', 'application/json; charset=UTF-8');
+    xhttp.send(JSON.stringify({"name": "cellbox", "cell_id": cell_id}));
+}
 
-    var xhttp = new XMLHttpRequest();
+function render_cycle_parameters(cycle_id, cell_id) {
+    // Asynchronously fetch the rendered HTML for this cell_id
+    xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4) {
             if (this.status == 200) {
                 document.getElementById("cycleparams_" + cell_id).innerHTML = this.responseText;
-            } else{
-                alert(this.status);
+                document.getElementById("cycle_select_" + cell_id).selectedIndex = cycle_id;
             }
         }
     };
-    xhttp.open("POST", "/get_cycle_param_display", true);
-    xhttp.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-    xhttp.send("cycle_id=" + cycle_id + "&cell_id=" + cell_id);
+    xhttp.open("POST", "/render", true);
+    xhttp.setRequestHeader('content-type', 'application/json; charset=UTF-8');
+    xhttp.send(JSON.stringify({"name": "cycleparams", "cell_id": cell_id, "cycle_id": cycle_id}));
+}
+
+function update_cycle_parameters(cell_id) {
+    cycle_id = document.getElementById("cycle_select_" + cell_id).selectedIndex;
+    render_cycle_parameters(cycle_id, cell_id);
 }
