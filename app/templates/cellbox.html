@@ -1,6 +1,6 @@
 <!--- This is for a cell which is currently running. -->
 {% macro cell_running(cell_id, cell_config, cell_handler) %}
-<h3>Running: {{ cellhandler.check_cell() }} / {{ cellhandler.num_cycles }} Cycles</h3>
+<h3>Running: {{ cell_handler.check_cell() }} / {{ cell_handler.num_cycles }} Cycles</h3>
 {% endmacro %}
 
 <!--- This is for a cell which is not currently running -->
