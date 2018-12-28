@@ -1,7 +1,7 @@
 import csv, os
 
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-LOGS_URL = os.path.join(SITE_ROOT, "files/logs")
+LOGS_URL = os.path.join(SITE_ROOT, "../../files/logs")
 
 
 class CSVLog:

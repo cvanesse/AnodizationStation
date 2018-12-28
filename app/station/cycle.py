@@ -2,7 +2,7 @@
 import csv, glob, os
 
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-CYCLES_URL = os.path.join(SITE_ROOT, "files/cycles")
+CYCLES_URL = os.path.join(SITE_ROOT, "../files/cycles")
 
 
 class Cycle:
