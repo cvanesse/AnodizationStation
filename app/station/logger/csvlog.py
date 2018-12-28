@@ -1,12 +1,15 @@
-import csv
+import csv, os
+
+SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+LOGS_URL = os.path.join(SITE_ROOT, "files/logs")
 
 
 class CSVLog:
 
     wq = []
 
-    def __init__(self, fp, tagNames):
-        self.filepath = fp
+    def __init__(self, filename, tagNames):
+        self.filepath = os.path.join(LOGS_URL, filename)
         self.write(tagNames)
 
     def queue(self, row):

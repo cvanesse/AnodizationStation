@@ -1,9 +1,10 @@
 # The cycles file will handle everything to do with cycles
-import csv
-import glob
+import csv, glob, os
+
+SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+CYCLES_URL = os.path.join(SITE_ROOT, "files/cycles")
 
 
-# It will not hold the "runcycle" function, that it a member of the cell class
 class Cycle:
 
     commands = []
@@ -27,7 +28,7 @@ class Cycle:
 def parse_cycle_file(filename, parameters):
     c = []
     a = []
-    with open(filename, 'r') as f:
+    with open(os.path.join(CYCLES_URL, filename), 'r') as f:
         reader = csv.reader(f)
 
         parameter_names = []
