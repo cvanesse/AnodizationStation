@@ -9,6 +9,8 @@ CYCLES_URL = os.path.join(SITE_ROOT, "files/cycles")
 LOGS_URL = os.path.join(SITE_ROOT, "files/logs")
 with open(os.path.join(CYCLES_URL, 'cycles.json')) as f:
     CYCLE_INFO = json.load(f)
+with open(os.path.join(LOGS_URL, 'logs.json')) as f:
+    LOGS_INFO = json.load(f)
 
 
 @FLASK_APP.route('/')
@@ -31,7 +33,7 @@ def get_cycles_json():
     return cycle_json
 
 
-@FLASK_APP.route('/pagelog')
+@FLASK_APP.route('/logpage')
 def render_log_page():
     title = "Logs"
     return render_template("logs.html", title=title)
@@ -44,9 +46,8 @@ def run_cell():
     num_cycles = int(vals['num_cycles'])
     cycle_id = int(vals['cycle_id'])
 
-    all_cycle_info = get_all_cycle_info()
-    cycle_file = all_cycle_info[cycle_id]['filename']
-    cycle_param_names = all_cycle_info[cycle_id]['parameters']
+    cycle_file = CYCLE_INFO[cycle_id]['filename']
+    cycle_param_names = CYCLE_INFO[cycle_id]['parameters']
 
     cycle_params = []
     for pid in range(len(cycle_param_names)):
@@ -58,7 +59,7 @@ def run_cell():
 
     success = STATION.cell_handlers[cell_id].run()
     if success:
-        return render_template("cellbox.html", cellhandler=STATION.cell_handlers[cell_id], all_cycle_info=get_all_cycle_info(), cid=0)
+        return render_template("cellbox.html", cellhandler=STATION.cell_handlers[cell_id], all_cycle_info=CYCLE_INFO, cid=0)
     else:
         return "Error!"
 

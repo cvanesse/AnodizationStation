@@ -9,7 +9,7 @@
 <hr>
 <select id="cycle_select_{{cellhandler.cellID}}" onchange=update_cellbox({{ cellhandler.cellID }})>
     {% for cyc in all_cycle_info %}
-    <option value="{{cyc['displayname']}}">{{cyc['displayname']}}</option>
+    <option value="{{cyc['name']}}">{{cyc['name']}}</option>
     {% endfor %}
 </select><br><br>
 
