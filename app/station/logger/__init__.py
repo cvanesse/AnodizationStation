@@ -23,13 +23,13 @@ class Logger:
 
 
 # This function adds log information to logs.json
-def add_log_to_database(file_info):
+def add_log_to_database(file_info, name, date):
     database_filename = os.path.join(LOGS_URL, 'logs.json')
 
     with open(database_filename) as f:
         LOGS_INFO = json.load(f)
 
-    LOGS_INFO.append(file_info)
+    LOGS_INFO[date][name] = file_info
 
     os.remove(database_filename)
 

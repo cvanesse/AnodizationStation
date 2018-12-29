@@ -60,9 +60,8 @@ class Cell:
         add_log_to_database({
             'file': self.log.filename,
             'user': self.user,
-            'time': str(datetime.datetime.now()),
-            'name': self.name
-        })
+            'time': str(datetime.datetime.now())
+        }, self.name, datetime.datetime.now().strftime("%Y-%m-%d"))
 
     # The loop run on the designated sensing thread
     # The sensing thread handles reading sensors and checking for a kill signal from the CellHandler
