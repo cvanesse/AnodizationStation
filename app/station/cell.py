@@ -21,12 +21,12 @@ class Cell:
     cell_pipe = []
     die = []
 
-    def __init__(self, runningpin, buspins, buttonpin, logfile, cellpipe):
+    def __init__(self, runningpin, buspins, buttonpin, cellpipe):
         self.bus = Bus(buspins)
         self.running_pin = Pin(runningpin)
         self.button = DigiPinSensor(buttonpin)
         self.button.add_callback(self.kill)
-        self.log = CSVLog(logfile, self.tag_names)
+        self.log = CSVLog(tagnames=self.tag_names)
         self.current_sensor = CurrentSensor(self.ina_address)
         self.cell_pipe = cellpipe
         self.cell_pipe.send(0)

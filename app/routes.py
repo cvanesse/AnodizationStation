@@ -43,7 +43,7 @@ def logout():
 @login_required
 def render_cell_control():
     title = 'Cell Control'
-    return render_template("cellcontrol.html", title=title, cell_config=CELL_CONFIG, json_cycle_info=STATION.CYCLE_INFO, json_cell_config=CELL_CONFIG)
+    return render_template("cellcontrol.html", title=title, cell_config=CELL_CONFIG, json_cycle_info=STATION.CYCLEBANK.CYCLE_INFO, json_cell_config=CELL_CONFIG)
 
 
 @FLASK_APP.route('/cyclepage', methods=["GET", "POST"])
@@ -55,7 +55,7 @@ def render_cycle_page():
         f = form.cyclefile.data
         filename = secure_filename(f.filename)
         f.save(os.path.join(CYCLES_URL, filename))
-        STATION.process_cycle_file(filename)
+        STATION.CYCLEBANK.process_cycle_file(filename)
         redirect(url_for('render_cell_control'))
     return render_template("cycles.html", title=title, form=form)
 
@@ -74,9 +74,9 @@ def get_json():
     name = vals['name']
 
     if name == "CYCLE_INFO":
-        ret = json.htmlsafe_dumps(STATION.CYCLE_INFO)
+        ret = json.htmlsafe_dumps(STATION.CYCLEBANK.CYCLE_INFO)
     elif name == "LOGS_INFO":
-        ret = json.htmlsafe_dumps(STATION.LOGS_INFO)
+        ret = json.htmlsafe_dumps(STATION.LOGGER.LOGS_INFO)
     elif name == "CELL_CONFIG":
         ret = json.htmlsafe_dumps(CELL_CONFIG)
     else:
@@ -95,7 +95,7 @@ def run_cell():
     num_cycles = info['num_cycles']
 
     STATION.cell_handlers[cell_id].set_num_cycles(num_cycles)
-    STATION.cell_handlers[cell_id].set_cycle(STATION.CYCLE_INFO[cycle_id]['file'])
+    STATION.cell_handlers[cell_id].set_cycle(STATION.CYCLEBANK.CYCLE_INFO[cycle_id]['file'])
     STATION.cell_handlers[cell_id].set_cycle_parameters(cycle_params)
 
     success = STATION.cell_handlers[cell_id].run()
@@ -128,4 +128,4 @@ def render_cellbox(cid):
 
 
 def render_cycle_params(cid, cyid):
-    return render_template("cycleparams.html", all_cycle_info=STATION.CYCLE_INFO, cycle_id=cyid, cell_id=cid)
+    return render_template("cycleparams.html", all_cycle_info=STATION.CYCLEBANK.CYCLE_INFO, cycle_id=cyid, cell_id=cid)

@@ -1,7 +1,7 @@
 # The cell handler is the API for handling Cell initialization and running
 from .cell import Cell
 from multiprocessing import Process, Pipe
-from .cycle import load_cycle
+from .cyclebank import load_cycle
 
 
 class CellHandler:
@@ -28,10 +28,6 @@ class CellHandler:
         self.bus_pins = cellconfig["bus_pins"]
         self.button_pin = cellconfig["button_pin"]
         self.cellID = cid
-        self.cycle_file = cellconfig["cycle_file"]
-        self.num_cycles = 5
-        self.log_file = cellconfig["log_file"]
-        self.cycle_parameters = cellconfig["cycle_params"]
         self.cell_process = Process(target=self.run_cell)
 
     # This sets the cycle file which will be interpretted and passed to the cell when CellHandler.run() is called
@@ -52,7 +48,7 @@ class CellHandler:
 
     # This creates a Cell object
     def make_cell(self, cellpipe):
-        cell = Cell(self.running_pin, self.bus_pins, self.button_pin, self.log_file, cellpipe)
+        cell = Cell(self.running_pin, self.bus_pins, self.button_pin, cellpipe)
         cell_cycle = load_cycle(cell, self.cycle_file, self.cycle_parameters)
         cell.set_cycle(cell_cycle)
         return cell
