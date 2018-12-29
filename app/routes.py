@@ -1,10 +1,10 @@
 from app import FLASK_APP, FLASK_LOGIN
-from flask import render_template, request, json, url_for, redirect
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import render_template, request, json, url_for, redirect, send_from_directory
+from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 from flask_login import current_user, login_user, login_required, logout_user
 from app.station.station import Station
-from app.forms import LoginForm, CycleUploadForm
+from app.forms import LoginForm, CycleUploadForm, LogDownloadForm
 from app.models import User
 import os
 
@@ -43,7 +43,7 @@ def logout():
 @login_required
 def render_cell_control():
     title = 'Cell Control'
-    return render_template("cellcontrol.html", title=title, cell_config=CELL_CONFIG, json_cycle_info=STATION.CYCLEBANK.CYCLE_INFO, json_cell_config=CELL_CONFIG)
+    return render_template("cellcontrol.html", title=title, cycle_info=STATION.CYCLEBANK.CYCLE_INFO, cell_config=CELL_CONFIG)
 
 
 @FLASK_APP.route('/cyclepage', methods=["GET", "POST"])
@@ -60,11 +60,26 @@ def render_cycle_page():
     return render_template("cycles.html", title=title, form=form)
 
 
-@FLASK_APP.route('/logpage')
+@FLASK_APP.route('/logpage', methods=['GET', 'POST'])
 @login_required
 def render_log_page():
     title = "Logs"
-    return render_template("logs.html", title=title)
+    form = LogDownloadForm()
+    if form.validate_on_submit():
+        STATION.LOGGER.update_log_info()
+        date = form.date.data
+        name = form.name.data
+        try:
+            filename = STATION.LOGGER.LOGS_INFO[date.strftime("%Y-%m-%d")][name]['file']
+            if filename is not None:
+                send_from_directory(LOGS_URL, filename=filename)
+                redirect(url_for('render_log_page'))
+            else:
+                redirect(url_for('render_log_page'))
+        except Exception as e:
+            redirect(url_for('render_log_page'))
+
+    return render_template("logs.html", title=title, form=form)
 
 
 @FLASK_APP.route('/get_json', methods=['POST'])
