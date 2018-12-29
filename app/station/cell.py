@@ -64,10 +64,6 @@ class Cell:
             if self.cell_pipe.poll():
                 self.die = self.cell_pipe.recv()
 
-    # Cell.log handles logging the current time and all the sensors of the cell
-    def log(self):
-        self.log.write([time.clock(), self.current_sensor.read()])
-
     # Cell.time_delay does a time delay for the given amount of seconds while still logging
     def time_delay(self, seconds):
         start = time.clock()
@@ -83,8 +79,8 @@ class Cell:
 
         while not self.die and charge < total_charge:
             now = time.clock()
-            now_current = self.current
-            charge += (now_current + then_current) * (now - then) / 2
+            now_current = self.current_sensor.read()  # This is a hack, find a way to communicate with logger thread
+            charge = charge + (now_current + then_current) * (now - then) / 2
             then = now
             then_current = now_current
 
