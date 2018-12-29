@@ -55,15 +55,14 @@ class CellHandler:
 
     # Starts a cell process with a pipe to communicate with it
     def run(self):
-        if not (self.cycle_file is None or self.log_file is None or self.cycle_parameters is None or self.num_cycles is None):
+        try:
             [self.handler_pipe, cell_pipe] = Pipe(True)
             self.try_join()
             self.cell_process = Process(target=self.run_cell, args=[cell_pipe])
             self.cell_process.start()
-            return True
-        else:
-            RuntimeError("CellHandler not prepared! Please define all necessary parameters before running.")
-            return False
+            return "Success"
+        except Exception as e:
+            return e
 
     # This checks for the progress of the cell.
     def check_cell(self):

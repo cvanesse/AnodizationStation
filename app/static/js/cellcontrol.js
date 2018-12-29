@@ -24,7 +24,7 @@ function run_cell(cell_id) {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4) {
             if (this.status == 200) {
-                if (this.responseText == "Cell started.") {
+                if (this.responseText == "Success") {
                     setrunning(cell_id);
                     setTimeout(render_cellbox(cell_id), 15);
                 } else {

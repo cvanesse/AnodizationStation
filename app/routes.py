@@ -98,12 +98,7 @@ def run_cell():
     STATION.cell_handlers[cell_id].set_cycle(STATION.CYCLEBANK.CYCLE_INFO[cycle_id]['file'])
     STATION.cell_handlers[cell_id].set_cycle_parameters(cycle_params)
 
-    success = STATION.cell_handlers[cell_id].run()
-
-    if success:
-        return "Cell started."
-    else:
-        return "Error while starting cell."
+    return STATION.cell_handlers[cell_id].run()
 
 
 @FLASK_APP.route('/render', methods=['POST'])
