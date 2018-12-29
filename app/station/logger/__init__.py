@@ -29,6 +29,8 @@ def add_log_to_database(file_info, name, date):
     with open(database_filename) as f:
         LOGS_INFO = json.load(f)
 
+    if not LOGS_INFO.has_key(date):
+        LOGS_INFO[date] = {}
     LOGS_INFO[date][name] = file_info
 
     os.remove(database_filename)
