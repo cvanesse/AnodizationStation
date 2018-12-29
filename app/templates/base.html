@@ -20,9 +20,15 @@
         </div>
 
         <div class="navbar">
+            {% if current_user.is_anonymous %}
+                <a href="{{ url_for('render_login_page') }}">Login</a>
+            {% else %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% endif %}
+
             <a href="/cellcontrol">Cell Control</a>
-            <a href="/cycles">Cycles</a>
-            <a href="/logs">Log Files</a>
+            <a href="/cyclepage">Cycles</a>
+            <a href="/logpage">Log Files</a>
         </div>
 
         {% block content %}{% endblock %}

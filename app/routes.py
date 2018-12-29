@@ -1,6 +1,10 @@
-from app import FLASK_APP
-from flask import render_template, request, json, url_for
+from app import FLASK_APP, FLASK_LOGIN
+from flask import render_template, request, json, url_for, redirect
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import current_user, login_user, login_required, logout_user
 from app.station.station import Station
+from app.forms import LoginForm
+from app.models import User
 import os
 
 
@@ -17,27 +21,51 @@ with open(os.path.join(SITE_ROOT, 'files/cellconfig.json')) as f:
 STATION = Station(CELL_CONFIG)
 
 
+
+@FLASK_APP.route('/login', methods=["GET", "POST"])
+def render_login_page():
+    form = LoginForm()
+    title = "Sign In"
+    if form.validate_on_submit():
+        proposed_user = User(form.username.data)
+        if proposed_user.phash is None or not check_password_hash(proposed_user.phash, form.password.data):
+            return redirect(url_for('render_login_page'))
+        login_user(proposed_user, remember=form.remember_me.data)
+        return redirect(url_for('render_cell_control'))
+    return render_template("login.html", title=title, form=form)
+
+
+@FLASK_APP.route('/logout', methods=["GET", "POST"])
+def logout():
+    logout_user()
+    return redirect(url_for('render_login_page'))
+
+
 @FLASK_APP.route('/')
 @FLASK_APP.route('/index')
 @FLASK_APP.route('/cellcontrol', methods=['GET'])
+@login_required
 def render_cell_control():
     title = 'Cell Control'
     return render_template("cellcontrol.html", title=title, cell_config=CELL_CONFIG, json_cycle_info=CYCLE_INFO, json_cell_config=CELL_CONFIG)
 
 
 @FLASK_APP.route('/cyclepage')
+@login_required
 def render_cycle_page():
     title = 'Cycles'
     return render_template("cycles.html", title=title)
 
 
 @FLASK_APP.route('/logpage')
+@login_required
 def render_log_page():
     title = "Logs"
     return render_template("logs.html", title=title)
 
 
 @FLASK_APP.route('/get_json', methods=['POST'])
+@login_required
 def get_json():
     vals = request.values
     name = vals['name']
@@ -55,6 +83,7 @@ def get_json():
 
 
 @FLASK_APP.route('/run_cell', methods=['POST'])
+@login_required
 def run_cell():
     info = request.get_json()
     cycle_id = info['cycle_id']
@@ -74,6 +103,7 @@ def run_cell():
         return "Error while starting cell."
 
 @FLASK_APP.route('/render', methods=['POST'])
+@login_required
 def do_render():
     info = request.get_json()
     name = info['name']
