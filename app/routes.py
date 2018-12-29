@@ -72,8 +72,7 @@ def render_log_page():
         try:
             filename = STATION.LOGGER.LOGS_INFO[date.strftime("%Y-%m-%d")][name]['file']
             if filename is not None:
-                send_from_directory(LOGS_URL, filename=filename)
-                redirect(url_for('render_log_page'))
+                return send_from_directory(directory=LOGS_URL, filename=filename, as_attachment=True)
             else:
                 redirect(url_for('render_log_page'))
         except Exception as e:

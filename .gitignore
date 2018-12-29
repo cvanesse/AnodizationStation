@@ -1,4 +1,8 @@
 venv/*
+app/files/logs/*
+app/files/cycles/*
 .idea
 *.csv
 *.pyc
+*.json
+*.cycle
