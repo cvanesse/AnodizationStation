@@ -29,7 +29,7 @@ class CycleBank:
         os.remove(database_filename)
 
         with open(os.path.join(CYCLES_URL, 'cycles.json'), 'w') as f:
-            f.writelines(json.dumps(self.CYCLE_INFO))
+            f.writelines(json.dumps(self.CYCLE_INFO, sort_keys=True, indent=2))
 
     # This gets the file and display names of all the .cycle files in files/cycles
     def get_all_cycle_info(self):

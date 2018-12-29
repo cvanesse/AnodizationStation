@@ -12,6 +12,7 @@ function run_cell(cell_id) {
         "cell_id": cell_id,
         "cycle_id": document.getElementById("cycle_select_" + cell_id).selectedIndex,
         "cycle_params": []
+        "name": document.getElementById("name_" + cell_id.value)
     };
 
     for (pid = 0; pid < window.CYCLE_INFO[info.cycle_id].parameters.length; pid++) {

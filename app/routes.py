@@ -93,7 +93,10 @@ def run_cell():
     cell_id = info['cell_id']
     cycle_params = info['cycle_params']
     num_cycles = info['num_cycles']
+    sample_name = info['name']
 
+    STATION.cell_handlers[cell_id].set_user(current_user.uname)
+    STATION.cell_handlers[cell_id].set_name(sample_name)
     STATION.cell_handlers[cell_id].set_num_cycles(num_cycles)
     STATION.cell_handlers[cell_id].set_cycle(STATION.CYCLEBANK.CYCLE_INFO[cycle_id]['file'])
     STATION.cell_handlers[cell_id].set_cycle_parameters(cycle_params)

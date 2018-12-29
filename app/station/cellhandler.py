@@ -9,8 +9,9 @@ class CellHandler:
     # Cell Settings
     num_cycles = None
     cycle_file = None
-    log_file = None
     cycle_parameters = None
+    name = None
+    user = None
 
     # Multiprocessing variables
     handler_pipe = []
@@ -19,19 +20,13 @@ class CellHandler:
     cell_progress = 0
 
     def __init__(self, cellconfig, cid):
-        self.running_pin = cellconfig["running_pin"]
-        self.bus_pins = cellconfig["bus_pins"]
-        self.button_pin = cellconfig["button_pin"]
+        self.cell_config = cellconfig
         self.cellID = cid
         self.cell_process = Process(target=self.run_cell)
 
     # This sets the cycle file which will be interpretted and passed to the cell when CellHandler.run() is called
     def set_cycle(self, newcycle):
         self.cycle_file = newcycle
-
-    # This sets the log file which the cell will write to
-    def set_log_file(self, newlog):
-        self.log_file = newlog
 
     # This sets the number of cycles which is passed to the cell when CellHandler.run() is called
     def set_num_cycles(self, numcycles):
@@ -41,9 +36,15 @@ class CellHandler:
     def set_cycle_parameters(self, params):
         self.cycle_parameters = params.copy()
 
+    def set_user(self, user):
+        self.user = user
+
+    def set_name(self, name):
+        self.name = name
+
     # This creates a Cell object
     def make_cell(self, cellpipe):
-        cell = Cell(self.running_pin, self.bus_pins, self.button_pin, cellpipe)
+        cell = Cell(self.cell_config, self.user, self.name, cellpipe)
         cell_cycle = load_cycle(cell, self.cycle_file, self.cycle_parameters)
         cell.set_cycle(cell_cycle)
         return cell

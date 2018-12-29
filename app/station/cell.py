@@ -1,7 +1,7 @@
 from .gpiocontrol import Bus, Pin
-from .logger import CSVLog
+from .logger import CSVLog, add_log_to_database
 from .pisense import CurrentSensor, DigiPinSensor
-import time
+import time, datetime
 from threading import Thread
 
 
@@ -21,10 +21,12 @@ class Cell:
     cell_pipe = []
     die = []
 
-    def __init__(self, runningpin, buspins, buttonpin, cellpipe):
-        self.bus = Bus(buspins)
-        self.running_pin = Pin(runningpin)
-        self.button = DigiPinSensor(buttonpin)
+    def __init__(self, cell_config, user, name, cellpipe):
+        self.user = user
+        self.name = name
+        self.bus = Bus(cell_config['bus_pins'])
+        self.running_pin = Pin(cell_config['running_pin'])
+        self.button = DigiPinSensor(cell_config['button_pin'])
         self.button.add_callback(self.kill)
         self.log = CSVLog(tagnames=self.tag_names)
         self.current_sensor = CurrentSensor(self.ina_address)
@@ -53,6 +55,14 @@ class Cell:
         sensor_thread.join()
 
         self.running_pin.setstate(0)
+
+        # Add the log file to the database
+        add_log_to_database({
+            'file': self.log.filename,
+            'user': self.user,
+            'time': str(datetime.datetime.now()),
+            'name': self.name
+        })
 
     # The loop run on the designated sensing thread
     # The sensing thread handles reading sensors and checking for a kill signal from the CellHandler
