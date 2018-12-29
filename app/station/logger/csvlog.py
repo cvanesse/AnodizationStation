@@ -1,5 +1,4 @@
-import csv, os
-from ..logger import generate_log_filename
+import csv, os, datetime, base64
 
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 LOGS_URL = os.path.join(SITE_ROOT, "../../files/logs")
@@ -13,7 +12,7 @@ class CSVLog:
         if filename is not None:
             self.filename = filename
         else:
-            self.filename = generate_log_filename()
+            self.filename = self.generate_log_filename()
 
         self.filepath = os.path.join(LOGS_URL, self.filename)
 
@@ -33,3 +32,8 @@ class CSVLog:
         with open(self.filepath, 'a') as f:
             wr = csv.writer(f)
             wr.writerow(row)
+
+    # This function creates a log filename which hasnt been used yet.
+    def generate_log_filename(self):
+        now = datetime.datetime.now()
+        return base64.urlsafe_b64encode(str(now).encode('ascii')) + '.csv'
