@@ -7,17 +7,12 @@ from .cyclebank import load_cycle
 class CellHandler:
 
     # Cell Settings
-    num_cycles = 0
-    cycle_file = ''
-    bus_pins = []
-    running_pin = []
-    button_pin = []
-    log_file = ''
-    cycle_parameters = []
-    cellID = -1
+    num_cycles = None
+    cycle_file = None
+    log_file = None
+    cycle_parameters = None
 
     # Multiprocessing variables
-    cell_process = []
     handler_pipe = []
 
     # Cell State Variables
@@ -60,9 +55,8 @@ class CellHandler:
 
     # Starts a cell process with a pipe to communicate with it
     def run(self):
-        if not (len(self.cycle_file) == 0 or len(self.log_file) == 0 or len(self.cycle_parameters) == 0 or self.num_cycles == 0):
+        if not (self.cycle_file is None or self.log_file is None or self.cycle_parameters is None or self.num_cycles is None):
             [self.handler_pipe, cell_pipe] = Pipe(True)
-            self.handler_pipe.send(False)
             self.try_join()
             self.cell_process = Process(target=self.run_cell, args=[cell_pipe])
             self.cell_process.start()
