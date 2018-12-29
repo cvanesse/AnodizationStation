@@ -36,4 +36,4 @@ class CSVLog:
     # This function creates a log filename which hasnt been used yet.
     def generate_log_filename(self):
         now = datetime.datetime.now()
-        return base64.urlsafe_b64encode(str(now).encode('ascii')) + '.csv'
+        return str(base64.urlsafe_b64encode(str(now).encode('ascii'))) + '.csv'

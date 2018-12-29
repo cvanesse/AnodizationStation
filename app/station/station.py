@@ -5,7 +5,7 @@ from .logger import Logger
 from .cyclebank import CycleBank
 
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-
+SITE_ROOT = os.path.join(SITE_ROOT, '../')
 
 class Station:
 
