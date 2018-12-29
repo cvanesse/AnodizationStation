@@ -28,6 +28,7 @@ function run_cell(cell_id) {
                     setrunning(cell_id);
                     setTimeout(render_cellbox(cell_id), 15);
                 } else {
+                    alert(this.responseText);
                     setwaiting(cell_id);
                     setTimeout(render_cellbox(cell_id), 15);
                 }
