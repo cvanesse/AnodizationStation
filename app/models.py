@@ -4,8 +4,6 @@ from app import FLASK_LOGIN
 import os
 
 
-
-
 @FLASK_LOGIN.user_loader
 def load_user(id):
     return User(id)

@@ -2,22 +2,15 @@
 
 {% block content %}
 
-    <h1>This will be the cycle management menu!</h1>
-    <p id="cyclelist"></p>
-    <script type="text/javascript">
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4) {
-                if (this.status == 200) {
-                    document.getElementById("cyclelist").innerHTML = this.responseText;
-                } else{
-                    alert(this.status);
-                }
-            }
-        };
-        xhttp.open("POST", "/get_cycle_names", true);
-        xhttp.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-        xhttp.send();
-    </script>
+    <h1>Cycle Uploader</h1>
+
+    <form action="" method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.cyclefile.label }} <br>
+            {{ form.cyclefile() }}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
 
 {% endblock %}

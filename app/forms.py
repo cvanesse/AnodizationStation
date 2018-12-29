@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from flask_wtf.file import FileField, FileRequired
 from wtforms.validators import DataRequired
 
 
@@ -8,3 +9,8 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
+
+
+class CycleUploadForm(FlaskForm):
+    cyclefile = FileField('.cycle File', validators=[FileRequired()])
+    submit = SubmitField('Upload')
