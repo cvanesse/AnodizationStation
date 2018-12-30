@@ -1,6 +1,7 @@
 venv/*
 app/files/logs/*
 app/files/cycles/*
+app/logs/*
 .idea
 *.csv
 *.pyc
