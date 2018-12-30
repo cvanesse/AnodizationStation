@@ -19,7 +19,10 @@ class User(UserMixin):
             USER_INFO = json.load(f)
 
         self.uname = id
-        self.phash = USER_INFO[id]['phash']
+        if id in USER_INFO:
+            self.phash = USER_INFO[id]['phash']
+        else:
+            self.phash = None
 
     def get_id(self):
         return self.uname
