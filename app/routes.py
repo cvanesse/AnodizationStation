@@ -4,9 +4,9 @@ from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 from flask_login import current_user, login_user, login_required, logout_user
 from app.station.station import Station
-from app.forms import LoginForm, CycleUploadForm, LogDownloadForm
+from app.forms import LoginForm, CycleUploadForm, LogDownloadForm, PowerForm
 from app.models import User
-import os
+import os, time
 
 
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
@@ -19,8 +19,30 @@ STATION = Station(CELL_CONFIG)
 
 
 @FLASK_APP.route('/power', methods=["GET", "POST"])
+@login_required
 def power():
-    pass
+    form = PowerForm()
+    title = "Power"
+    if form.validate_on_submit():
+        if not check_password_hash(current_user.phash, form.password.data):
+            return redirect(url_for('render_login_page'))
+
+        for cid in range(len(STATION.cell_handlers)):
+            STATION.cell_handlers[cid].kill()
+
+        cells_running = True
+        while cells_running:
+            cells_running = False
+            for cid in range(len(STATION.cell_handlers)):
+                cells_running = cells_running or STATION.cell_handlers[cid].cell_process.is_alive()
+
+        if form.reboot.data:
+            os.system('sudo reboot -h now')
+            return redirect(url_for('power'))
+        else:
+            os.system('sudo shutdown -h now')
+            return redirect(url_for('power'))
+    return render_template("power.html", title=title, form=form)
 
 
 @FLASK_APP.route('/login', methods=["GET", "POST"])

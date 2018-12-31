@@ -21,3 +21,9 @@ class LogDownloadForm(FlaskForm):
     date = DateField('Sample Creation Date', validators=[DataRequired()])
     name = StringField('Sample Name', validators=[DataRequired()])
     submit = SubmitField('Download')
+
+
+class PowerForm(FlaskForm):
+    password = PasswordField('Confirm Password', validators=[DataRequired()])
+    reboot = BooleanField('Reboot')
+    submit = SubmitField('Power Off')

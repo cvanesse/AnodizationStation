@@ -76,7 +76,8 @@ class CellHandler:
 
     # This tells the cell to die, so that it doesn't finish in the middle of an operation and corrupt anything.
     def kill(self):
-        self.handler_pipe.send(True)
+        if self.cell_process.is_alive():
+            self.handler_pipe.send(True)
 
     # Tries to rejoin the cell process. Returns false if it cant
     def try_join(self):
