@@ -1,0 +1,61 @@
+.centered-form-grid {
+    display: grid;
+    grid-template-rows: auto max-content auto;
+    grid-template-columns: auto max-content auto;
+}
+
+.centered-form-box {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+.centered-form-box h1, .centered-form-box h2, .centered-form-box h3{
+    padding: 1em 1em;
+    text-align: center;
+}
+
+.centered-form .form-element, .centered-form .form-element-checkbox {
+    display: block;
+    padding: 8px 0;
+    text-align: center;
+}
+
+.form-element label{
+    float: left;
+    padding: 8px 16px;
+}
+
+.form-element input[type=text], .form-element input[type=password], .form-element input[type=date]{
+    float: right;
+    background-color: #fff;
+    width: auto;
+    padding: 8px 16px;
+}
+
+input[type=checkbox]{
+    margin: 8px 0;
+}
+
+input[type=submit]{
+    background-color: #3A7734;
+    color: #fff;
+    padding: 8px 16px;
+    width: 100%;
+}
+
+input[type=submit]:hover{
+    cursor: pointer;
+    background-color: #42953b;
+    color: #fff;
+    padding: 8px 16px;
+    width: 100%;
+}
+
+.form-element select{
+    width: 100%;
+    background-color: #fff;
+    padding: 4px 8px;
+    text-align: center;
+}

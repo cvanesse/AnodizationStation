@@ -9,9 +9,25 @@
         init();
     </script>
 
-    {% for cid in range(cell_config|length) %}
-        <div class="cellbox" id="cellbox_{{ cid }}">
-        </div>
-    {% endfor %}
+    <link rel="stylesheet"
+        type="text/css"
+        href="{{ url_for('static', filename='styles/cellcontrol.css') }}" />
+
+    <link rel="stylesheet"
+        type="text/css"
+        href="{{ url_for('static', filename='styles/forms.css') }}" />
+
+    <div class="cell-grid">
+        {% for cid in range(cell_config|length) %}
+            {% if (cid % 2 == 0) %}
+            <div class="cell-box-left" id="cellbox_{{ cid }}">
+            </div>
+            {% else %}
+            <div class="cell-box-right" id="cellbox_{{ cid }}">
+            </div>
+            {% endif %}
+
+        {% endfor %}
+    </div>
 {% endblock %}
 

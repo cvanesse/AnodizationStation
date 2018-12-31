@@ -7,12 +7,24 @@
 {% macro cell_waiting(cell_id, cell_config, cell_handler) %}
     <h3 id="status_{{cell_id}}">Waiting...</h3>
     <hr>
-    <div id="cycleparams_{{ cell_id }}">
+    <div class="centered-form" id="cycleparams_{{ cell_id }}">
     </div>
     <hr>
-    Number of Cycles: <input type="text" id="num_cycles_{{ cell_id }}"><br>
-    Sample Name: <input type="text" id="name_{{ cell_id }}"><br><br>
-    <input type="button" value="Run" onclick=run_cell({{ cell_id }})>
+    <div class="centered-form">
+        <div class="form-element">
+            <label># of Cycles: </label>
+            <input type="text" id="num_cycles_{{ cell_id }}">
+        </div>
+        <div class="floatclear"></div>
+        <div class="form-element">
+            <label>Sample Name: </label>
+            <input type="text" id="name_{{ cell_id }}">
+        </div>
+        <div class="floatclear"></div>
+        <div class="form-element">
+            <input type="submit" value="Run" onclick=run_cell({{ cell_id }})>
+        </div>
+    </div>
 {% endmacro %}
 
 <h2>Cell #{{ cell_id }}</h2>
@@ -22,3 +34,4 @@
 {% else %}
     {{ cell_waiting(cell_id, cell_config, cell_handler) }}
 {% endif %}
+

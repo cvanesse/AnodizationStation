@@ -1,0 +1,38 @@
+.cell-grid {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.cell-box-left {
+    grid-column-start: 1;
+    grid-column-end: 2;
+
+    background-color: #ddd;
+    padding: 0 1em 1em 1em;
+    margin: 0 0.5em 0 0;
+    border: 2px solid #333;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.cell-box-left h1, .cell-box-left h2, .cell-box-left h3{
+    padding: 1em 1em;
+    text-align: center;
+}
+
+.cell-box-right {
+    grid-column-start: 2;
+    grid-column-end: 3;
+
+    background-color: #ddd;
+    padding: 0 1em 1em 1em;
+    margin: 0 0 0 0.5em;
+    border: 2px solid #333;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.cell-box-right h1, .cell-box-right h2, .cell-box-right h3{
+    padding: 1em 1em;
+    text-align: center;
+}

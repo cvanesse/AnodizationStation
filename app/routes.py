@@ -18,6 +18,11 @@ with open(os.path.join(SITE_ROOT, 'files/cellconfig.json')) as f:
 STATION = Station(CELL_CONFIG)
 
 
+@FLASK_APP.route('/power', methods=["GET", "POST"])
+def power():
+    pass
+
+
 @FLASK_APP.route('/login', methods=["GET", "POST"])
 def render_login_page():
     form = LoginForm()
@@ -136,7 +141,7 @@ def do_render():
 
 
 def render_cellbox(cid):
-    return render_template("cellbox.html", cell_id=cid, cell_config=CELL_CONFIG[cid], cell_handler=STATION.cell_handlers[cid])
+    return render_template("cellbox.html", cell_id=cid, cell_even=(cid % 2 == 0), cell_config=CELL_CONFIG[cid], cell_handler=STATION.cell_handlers[cid])
 
 
 def render_cycle_params(cid, cyid):

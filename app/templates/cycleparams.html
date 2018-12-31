@@ -1,9 +1,16 @@
-<select id="cycle_select_{{ cell_id }}" onchange="update_cycle_parameters( {{ cell_id }} )">
-    {% for cyc in all_cycle_info %}
-        <option value="{{ cyc['name'] }}">{{ cyc['name'] }}</option>
-    {% endfor %}
-</select><br><br>
+
+<div class="form-element">
+    <select id="cycle_select_{{ cell_id }}" onchange="update_cycle_parameters( {{ cell_id }} )">
+        {% for cyc in all_cycle_info %}
+            <option value="{{ cyc['name'] }}">{{ cyc['name'] }}</option>
+        {% endfor %}
+    </select>
+</div>
+
 
 {% for param in all_cycle_info[cycle_id]['parameters'] %}
-    {{ param }}: <input type="text" id="{{ param }}_{{ cell_id }}"><br>
+    <div class="form-element"><label>{{ param }}: </label> <input type="text" id="{{ param }}_{{ cell_id }}"></div>
+    <div class="floatclear"></div>
 {% endfor %}
+
+<br>

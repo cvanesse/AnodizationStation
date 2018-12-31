@@ -14,24 +14,28 @@
         href="{{ url_for('static', filename='styles/base.css') }}" />
 </head>
 <body>
-    <div class="main">
-        <div class="header">
-            <h1>The Anodization Station</h1>
-        </div>
+    <header class="base-header">
+        <h1>The Anodization Station</h1>
+    </header>
 
-        <div class="navbar">
-            {% if current_user.is_anonymous %}
-                <a href="{{ url_for('render_login_page') }}">Login</a>
-            {% else %}
-                <a href="{{ url_for('logout') }}">Logout</a>
-            {% endif %}
+    <div class="base-navbar">
+        <a class="base-navlink-pwr" href="{{ url_for('power') }}">Power</a>
+        {% if current_user.is_anonymous %}
+            <a class="base-navlink-auth" href="{{ url_for('render_login_page') }}">Sign In</a>
+        {% else %}
+            <a class="base-navlink-auth" href="{{ url_for('logout') }}">Sign Out</a>
+        {% endif %}
 
-            <a href="/cellcontrol">Cell Control</a>
-            <a href="/cyclepage">Cycles</a>
-            <a href="/logpage">Log Files</a>
-        </div>
+        <a class="base-navlink" href="{{ url_for('render_cell_control') }}">Cells</a>
+        <a class="base-navlink" href="{{ url_for('render_cycle_page') }}">Cycles</a>
+        <a class="base-navlink" href="{{ url_for('render_log_page') }}">Logs</a>
+    </div>
 
-        {% block content %}{% endblock %}
+    <div class="floatclear"></div>
+
+    <div class="base-content">
+        {% block content %}
+        {% endblock %}
     </div>
 </body>
 </html>

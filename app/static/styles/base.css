@@ -1,81 +1,69 @@
-.header {
-    background-color: whitesmoke;
-    text-align: center;
-    color: #505050;
-    padding: 10px;
+/* This stylesheet is just for the navbar and title */
+* {
+    margin: 0;
+    padding: 0;
+
+    font-family: Helvetica, sans-serif;
+    text-space: 1.6em;
 }
 
-.navbar {
-    overflow: hidden;
-    background-color: #303030
+body{
+    background-color: #eee;
 }
 
-.navbar a {
-    float: left;
-    display: block;
-    color: #f2f2f2;
+.floatclear{
+    clear: both;
+}
+
+.base-header {
+    background-color: #ccc;
     text-align: center;
-    padding: 14px 16px;
+    color: #333;
+    padding: 2em 1em;
+}
+
+.base-navbar {
+    background-color: #333;
+}
+
+.base-navbar a {
+    display: inline-block;
     text-decoration: none;
+    padding: 10px 12px;
 }
 
-.navbar a:hover{
-    background-color: #505050;
-    color: #ffffff;
+.base-navlink-pwr {
+    float: right;
+    background-color: #8b1d1d;
+    color: #ccc;
 }
 
-.cellbox {
-    background-color: #606060;
-    text-align: center;
-    margin: 10px;
-    color: #101010;
-    padding: 10px;
-    width: 50%;
+.base-navlink-pwr:hover {
+    background-color: #ad2222;
+    color: #fff;
+}
+
+.base-navlink-auth {
     float: left;
+    background-color: #11557C;
+    color: #ccc;
 }
 
-@media screen and (min-device-width: 320px) and (max-device-width: 480px) {
-    .cellbox {
-        width: 100%;
-    }
+.base-navlink-auth:hover {
+    background-color: #30799B;
+    color: #fff;
 }
 
-input[type=text] {
-    width: 33%;
-    padding: 5px;
-    margin: 8px;
-    box-sizing: border-box;
+.base-navlink {
+    background-color: #333;
+    color: #ccc;
 }
 
-input[type=password] {
-    width: 33%;
-    padding: 5px;
-    margin: 8px;
-    box-sizing: border-box;
+.base-navlink:hover {
+    background-color: #666;
+    color: #fff;
 }
 
-input[type=date] {
-    width: 33%;
-    padding: 5px;
-    margin: 8px;
-    box-sizing: border-box;
-}
-
-input[type=button] {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 16px 32px;
-    text-decoration: none;
-    margin: 4px 2px;
-    cursor: pointer;
-    width: 100%;
-}
-
-select {
-    padding: 16px 20px;
-    border: none;
-    border-radius: 4px;
-    background-color: #f1f1f1;
-    width: 100%;
+.base-content {
+    padding: 1em 1em;
 }
