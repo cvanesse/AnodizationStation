@@ -27,7 +27,7 @@
     </div>
 {% endmacro %}
 
-<h2>Cell #{{ cell_id }}</h2>
+<h2>Cell #{{ cell_id + 1 }}</h2>
 <hr>
 {% if cell_handler.cell_process.is_alive() %}
     {{ cell_running(cell_id, cell_config, cell_handler) }}

@@ -17,17 +17,9 @@
         type="text/css"
         href="{{ url_for('static', filename='styles/forms.css') }}" />
 
-    <div class="cell-grid">
-        {% for cid in range(cell_config|length) %}
-            {% if (cid % 2 == 0) %}
-            <div class="cell-box-left" id="cellbox_{{ cid }}">
-            </div>
-            {% else %}
-            <div class="cell-box-right" id="cellbox_{{ cid }}">
-            </div>
-            {% endif %}
-
-        {% endfor %}
-    </div>
+    {% for cid in range(cell_config|length) %}
+        <div class="cell-box" id="cellbox_{{ cid }}">
+        </div>
+    {% endfor %}
 {% endblock %}
 

@@ -34,6 +34,12 @@
     padding: 8px 16px;
 }
 
+.form-element input[type=file]{
+    float: right;
+    width: auto;
+    padding: 8px 16px
+}
+
 input[type=checkbox]{
     margin: 8px 0;
 }
