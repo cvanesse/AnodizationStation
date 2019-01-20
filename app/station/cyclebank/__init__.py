@@ -1,4 +1,4 @@
-import csv, glob, os, json
+import csv, glob, os, json, base64
 from .cycle import Cycle
 
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
@@ -67,27 +67,20 @@ class CycleBank:
             return [display_name, parameter_names]
 
 
-# This turns the cycle_file into a list of commands and parameters bound to the Cell object
+# This turns the cycle_file into a list of commands and parameters bound to the correct objects
 def load_cycle(cell, filename, parameters):
-    cycle = Cycle()
-    cycle_commands = parse_cycle_file(filename, parameters)
-    for cid in range(len(cycle_commands['call_names'])):
-        call_name = cycle_commands['call_names'][cid]
-        call_args = cycle_commands['call_args'][cid]
-        if call_name == 'time_delay':
-            cycle.addcommand(cell.time_delay, float(call_args))
-        elif call_name == 'charge_delay':
-            cycle.addcommand(cell.charge_delay, float(call_args))
-        elif call_name == 'set_bus_state':
-            cycle.addcommand(cell.set_bus_state, call_args)
-
+    cycle_info = parse_cycle_file(filename, parameters)
+    cycle = Cycle(cycle_info, cell)
     return cycle
 
 
 # This parses a cycle file
 def parse_cycle_file(filename, parameters):
-    c = []
-    a = []
+    calls = []
+    call_args = []
+    parameter_dict = {}
+
+    # First, fill out our dictionary
     with open(os.path.join(CYCLES_URL, filename), 'r') as f:
         reader = csv.reader(f)
 
@@ -95,7 +88,7 @@ def parse_cycle_file(filename, parameters):
 
         line1 = reader.__next__()  # Skip the first line, it's just the display name of the cycle
         line2 = reader.__next__()
-        if line2[0] == "Parameter Names:":
+        if line2[0] is "Parameter Names:":
             # Here we need to define the local parameter variables which will hold inputs,
             # then check that we have the right amount of inputs
             for col in range(len(line2)):
@@ -104,21 +97,67 @@ def parse_cycle_file(filename, parameters):
 
             if not len(parameter_names) == len(parameters):
                 ValueError("Parameter number mismatch! len(parameters) must equal len(parameter_names)")
-        else:
-            c.append(line2[0])
-            a.append(line2[1])
 
+            for iid in range(len(parameter_names)):
+                parameter_dict[parameter_names[iid]] = parameters[iid]
+
+    # Then, list all the command along with the arguments they take (wrt. dict), and continue to fill out dict as needed
+    with open(os.path.join(CYCLES_URL, filename), 'r') as f:
+        reader = csv.reader(f)
+
+        line1 = reader.__next__()  # Skip the first line, it's just the display name of the cycle
         for row in reader:
-            c.append(row[0])
-            if not len(parameter_names) == 0 and row[1] in parameter_names:
-                pid = parameter_names.index(row[1])
-                a.append(parameters[pid])
-            else:
-                a.append(row[1])
+            if row[0] is not "Parameter Names:":
+                calls.append(row[0])
+                rowparse = parse_row_params(row, parameter_dict)
+                parameter_dict = rowparse['dict']
+                call_args.append(rowparse['args'])
 
     cycle_commands = {
-        'call_names': c,
-        'call_args': a
+        'call_names': calls,
+        'call_args': call_args,
+        'arg_dictionary': parameter_dict
     }
 
     return cycle_commands
+
+
+def parse_row_params(rowvec, parameter_dict):
+    a = []
+
+    # If we have no parameters, return an empty array.
+    if len(rowvec) < 2:
+        return {
+            'dict': parameter_dict,
+            'args': ''
+        }
+
+    # If we only have one parameter, just return that parameter
+    if len(rowvec) is 2:
+        if not len(parameter_dict) == 0 and rowvec[1] in parameter_dict:
+            a = rowvec[1]
+        else:
+            name = base64.b32encode(str(rowvec[1]))
+            a = name
+            parameter_dict[name] = rowvec[1]
+
+        return {
+            'dict': parameter_dict,
+            'args': a
+        }
+
+    iid = 1
+    while iid is not len(rowvec):
+        if not len(parameter_dict) == 0 and rowvec[iid] in parameter_dict:
+            a.append(rowvec[iid])
+        else:
+            name = base64.b32encode(str(rowvec[iid]))
+            a.append(name)
+            parameter_dict[name] = rowvec[iid]
+
+        iid = iid + 1
+
+    return {
+        'dict': parameter_dict,
+        'args': a
+    }
