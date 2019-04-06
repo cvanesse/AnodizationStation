@@ -42,16 +42,11 @@ class CellHandler:
     def set_name(self, name):
         self.name = name
 
-    # This creates a Cell object
-    def make_cell(self, cellpipe):
+    # This runs make_cell and cell.run_cycle(), needs to be run on a child process
+    def run_cell(self, cellpipe):
         cell = Cell(self.cell_config, self.user, self.name, cellpipe)
         cell_cycle = load_cycle(cell, self.cycle_file, self.cycle_parameters)
         cell.set_cycle(cell_cycle)
-        return cell
-
-    # This runs make_cell and cell.run_cycle(), needs to be run on a child process
-    def run_cell(self, cellpipe):
-        cell = self.make_cell(cellpipe)
         cell.run_cycle(self.num_cycles)
 
     # Starts a cell process with a pipe to communicate with it
