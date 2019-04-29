@@ -73,7 +73,7 @@ class Cell:
     # The sensing thread handles reading sensors and checking for a kill signal from the CellHandler
     def sensor_loop(self):
         while self.keep_sensing:
-            now = time.perf_counter()
+            now = time.clock()
             self.current = self.current_sensor.read()
             self.log.write([now, self.cycle_num, self.state, self.current])
             if self.cell_pipe.poll():
