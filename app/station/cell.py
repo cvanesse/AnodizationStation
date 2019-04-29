@@ -10,7 +10,7 @@ class Cell:
 
     # These will eventually be set during initialization of the program
     ina_address = 0x40
-    tag_names = ['Time [s]', 'Current [mA]']
+    tag_names = ['Time [s]', 'Cycle Number', 'Cell State', 'Current [mA]']
 
     # We read sensors and log data on a separate thread from the control thread
     sensor_thread = []
@@ -20,6 +20,10 @@ class Cell:
     # We need a way to communicate with the CellHandler, and a state variable for various signals
     cell_pipe = []
     die = []
+
+    #Some state variables, for logging purposes
+    state = 'S'
+    cycle_num = 0
 
     def __init__(self, cell_config, user, name, cellpipe):
         self.user = user
@@ -49,6 +53,7 @@ class Cell:
         sensor_thread.start()
 
         for i in range(numcycles):
+            self.cycle_num = i + 1
             self.cycle.run()
             self.cell_pipe.send(i + 1)
 
@@ -70,7 +75,7 @@ class Cell:
         while self.keep_sensing:
             now = time.clock()
             self.current = self.current_sensor.read()
-            self.log.write([now, self.current])
+            self.log.write([now, self.cycle_num, self.state, self.current])
             if self.cell_pipe.poll():
                 self.die = self.cell_pipe.recv()
 
@@ -97,6 +102,7 @@ class Cell:
 
     # Cell.set_bus_state sets the bus to the configured state
     def set_bus_state(self, sid):
+        self.state = sid
         if not self.die:
             if sid == "S":
                 self.bus.setstate([0, 0])
