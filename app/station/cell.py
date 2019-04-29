@@ -73,7 +73,7 @@ class Cell:
     # The sensing thread handles reading sensors and checking for a kill signal from the CellHandler
     def sensor_loop(self):
         while self.keep_sensing:
-            now = time.clock()
+            now = time.perf_counter()
             self.current = self.current_sensor.read()
             self.log.write([now, self.cycle_num, self.state, self.current])
             if self.cell_pipe.poll():
@@ -81,20 +81,20 @@ class Cell:
 
     # Cell.time_delay does a time delay for the given amount of seconds while still logging
     def time_delay(self, seconds):
-        start = time.clock()
+        start = time.perf_counter()
         now = start
         while not self.die and (now - start) < float(seconds):
-            now = time.clock()
+            now = time.perf_counter()
 
     # Cell.charge_delay does a charge delay for the given amount of seconds while still logging
     def charge_delay(self, total_charge):
         total_charge = float(total_charge)
         charge = 0
-        then = time.clock()
+        then = time.perf_counter()
         then_current = self.current_sensor.read()
 
         while not self.die and charge < total_charge:
-            now = time.clock()
+            now = time.perf_counter()
             now_current = self.current_sensor.read()  # This is a hack, find a way to communicate with logger thread
             charge = charge + (now_current + then_current) * (now - then) / 2
             then = now
