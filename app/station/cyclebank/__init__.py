@@ -88,7 +88,7 @@ def parse_cycle_file(filename, parameters):
 
         line1 = reader.__next__()  # Skip the first line, it's just the display name of the cycle
         line2 = reader.__next__()
-        if line2[0] is "Parameter Names:":
+        if line2[0].startswith("Parameter"):
             # Here we need to define the local parameter variables which will hold inputs,
             # then check that we have the right amount of inputs
             for col in range(len(line2)):
@@ -137,7 +137,7 @@ def parse_row_params(rowvec, parameter_dict):
         if not len(parameter_dict) == 0 and rowvec[1] in parameter_dict:
             a = rowvec[1]
         else:
-            name = base64.b32encode(str(rowvec[1]))
+            name = base64.b32encode(rowvec[1].encode())
             a = name
             parameter_dict[name] = rowvec[1]
 
@@ -151,7 +151,7 @@ def parse_row_params(rowvec, parameter_dict):
         if not len(parameter_dict) == 0 and rowvec[iid] in parameter_dict:
             a.append(rowvec[iid])
         else:
-            name = base64.b32encode(str(rowvec[iid]))
+            name = base64.b32encode(rowvec[iid].encode())
             a.append(name)
             parameter_dict[name] = rowvec[iid]
 

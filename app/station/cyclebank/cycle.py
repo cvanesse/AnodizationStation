@@ -4,9 +4,11 @@ class Cycle:
     commands = []
     parameter_table = {}
     args = []
+    call_names = []
 
     def __init__(self, cycle_info, cell):
         self.parameter_table = cycle_info['arg_dictionary']
+        self.call_names = cycle_info['call_names']
 
         for cid in range(len(cycle_info['call_names'])):
             call_name = cycle_info['call_names'][cid]
@@ -29,8 +31,16 @@ class Cycle:
     def run(self):
         for cid in range(len(self.commands)):
             c = self.commands[cid]
-            a = [self.parameter_table[x] for x in self.args[cid]]
-            c(*a)
+            if not isinstance(self.args[cid], (bytes, str)):
+                a = [self.parameter_table[x] for x in self.args[cid]]
+                c(*a)
+                raise Exception(a)
+            else:
+                try:
+                    a = self.parameter_table[self.args[cid]]
+                    c(a)
+                except:
+                    raise Exception([self.call_names[cid], self.args[cid]])
 
     def increment_argument(self, name, incr):
         self.parameter_table[name] = self.parameter_table[name] + incr

@@ -78,11 +78,12 @@ class Cell:
     def time_delay(self, seconds):
         start = time.clock()
         now = start
-        while not self.die and (now - start) < seconds:
+        while not self.die and (now - start) < float(seconds):
             now = time.clock()
 
     # Cell.charge_delay does a charge delay for the given amount of seconds while still logging
     def charge_delay(self, total_charge):
+        total_charge = float(total_charge)
         charge = 0
         then = time.clock()
         then_current = self.current_sensor.read()

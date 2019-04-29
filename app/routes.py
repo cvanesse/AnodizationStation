@@ -101,9 +101,9 @@ def render_log_page():
             if filename is not None:
                 return send_from_directory(directory=LOGS_URL, filename=filename, as_attachment=True)
             else:
-                redirect(url_for('render_log_page'))
+                redirect(url_for('render_cell_control'))
         except Exception as e:
-            redirect(url_for('render_log_page'))
+            redirect(url_for('power'))
 
     return render_template("logs.html", title=title, form=form)
 
@@ -168,3 +168,4 @@ def render_cellbox(cid):
 
 def render_cycle_params(cid, cyid):
     return render_template("cycleparams.html", all_cycle_info=STATION.CYCLEBANK.CYCLE_INFO, cycle_id=cyid, cell_id=cid)
+
