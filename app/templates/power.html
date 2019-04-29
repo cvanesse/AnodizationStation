@@ -12,8 +12,6 @@
             <form class="centered-form" action="" method="post" novalidate>
                 {{ form.hidden_tag() }}
 
-                <div class="form-element">{{ form.password.label }} {{ form.password() }}</div>
-                <div class="floatclear"></div>
                 <div class="form-element-checkbox">{{ form.reboot() }} {{ form.reboot.label }}</div>
                 <div class="floatclear"></div>
                 <div class="form-element">{{ form.submit() }}</div>

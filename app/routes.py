@@ -2,10 +2,8 @@ from app import FLASK_APP, FLASK_LOGIN
 from flask import render_template, request, json, url_for, redirect, send_from_directory
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
-from flask_login import current_user, login_user, login_required, logout_user
 from app.station.station import Station
-from app.forms import LoginForm, CycleUploadForm, LogDownloadForm, PowerForm
-from app.models import User
+from app.forms import CycleUploadForm, LogDownloadForm, PowerForm
 import os, time
 
 
@@ -19,14 +17,10 @@ STATION = Station(CELL_CONFIG)
 
 
 @FLASK_APP.route('/power', methods=["GET", "POST"])
-@login_required
 def power():
     form = PowerForm()
     title = "Power"
     if form.validate_on_submit():
-        if not check_password_hash(current_user.phash, form.password.data):
-            return redirect(url_for('render_login_page'))
-
         for cid in range(len(STATION.cell_handlers)):
             STATION.cell_handlers[cid].kill()
 
@@ -45,36 +39,15 @@ def power():
     return render_template("power.html", title=title, form=form)
 
 
-@FLASK_APP.route('/login', methods=["GET", "POST"])
-def render_login_page():
-    form = LoginForm()
-    title = "Sign In"
-    if form.validate_on_submit():
-        proposed_user = User(form.username.data)
-        if proposed_user.phash is None or not check_password_hash(proposed_user.phash, form.password.data):
-            return redirect(url_for('render_login_page'))
-        login_user(proposed_user, remember=form.remember_me.data)
-        return redirect(url_for('render_cell_control'))
-    return render_template("login.html", title=title, form=form)
-
-
-@FLASK_APP.route('/logout', methods=["GET"])
-def logout():
-    logout_user()
-    return redirect(url_for('render_login_page'))
-
-
 @FLASK_APP.route('/')
 @FLASK_APP.route('/index')
 @FLASK_APP.route('/cellcontrol', methods=['GET'])
-@login_required
 def render_cell_control():
     title = 'Cell Control'
     return render_template("cellcontrol.html", title=title, cycle_info=STATION.CYCLEBANK.CYCLE_INFO, cell_config=CELL_CONFIG)
 
 
 @FLASK_APP.route('/cyclepage', methods=["GET", "POST"])
-@login_required
 def render_cycle_page():
     title = 'Cycles'
     form = CycleUploadForm()
@@ -88,7 +61,6 @@ def render_cycle_page():
 
 
 @FLASK_APP.route('/logpage', methods=['GET', 'POST'])
-@login_required
 def render_log_page():
     title = "Logs"
     form = LogDownloadForm()
@@ -109,7 +81,6 @@ def render_log_page():
 
 
 @FLASK_APP.route('/get_json', methods=['POST'])
-@login_required
 def get_json():
     vals = request.values
     name = vals['name']
@@ -127,7 +98,6 @@ def get_json():
 
 
 @FLASK_APP.route('/run_cell', methods=['POST'])
-@login_required
 def run_cell():
     info = request.get_json()
     cycle_id = info['cycle_id']
@@ -136,7 +106,7 @@ def run_cell():
     num_cycles = info['num_cycles']
     sample_name = info['name']
 
-    STATION.cell_handlers[cell_id].set_user(current_user.uname)
+    STATION.cell_handlers[cell_id].set_user('web')
     STATION.cell_handlers[cell_id].set_name(sample_name)
     STATION.cell_handlers[cell_id].set_num_cycles(num_cycles)
     STATION.cell_handlers[cell_id].set_cycle(STATION.CYCLEBANK.CYCLE_INFO[cycle_id]['file'])
@@ -146,7 +116,6 @@ def run_cell():
 
 
 @FLASK_APP.route('/render', methods=['POST'])
-@login_required
 def do_render():
     info = request.get_json()
     name = info['name']

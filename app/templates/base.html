@@ -20,11 +20,6 @@
 
     <div class="base-navbar">
         <a class="base-navlink-pwr" href="{{ url_for('power') }}">Power</a>
-        {% if current_user.is_anonymous %}
-            <a class="base-navlink-auth" href="{{ url_for('render_login_page') }}">Sign In</a>
-        {% else %}
-            <a class="base-navlink-auth" href="{{ url_for('logout') }}">Sign Out</a>
-        {% endif %}
 
         <a class="base-navlink" href="{{ url_for('render_cell_control') }}">Cells</a>
         <a class="base-navlink" href="{{ url_for('render_cycle_page') }}">Cycles</a>
