@@ -30,9 +30,9 @@ class Cell:
         self.name = name
         self.bus = Bus(cell_config['bus_pins'])
         self.running_pin = Pin(cell_config['running_pin'])
-        self.button = DigiPinSensor(cell_config['button_pin'])
+        #self.button = DigiPinSensor(cell_config['button_pin'])
         self.ina_address = cell_config['ina_address']
-        self.button.add_callback(self.kill)
+        #self.button.add_callback(self.kill)
         self.log = CSVLog(tagnames=self.tag_names)
         self.current_sensor = CurrentSensor(self.ina_address)
         self.cell_pipe = cellpipe
