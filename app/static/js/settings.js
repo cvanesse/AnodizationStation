@@ -13,7 +13,8 @@ function clear_logs(){
         }
     };
     xhttp.open("POST", "/clear_logs", true);
-    xhttp.setRequestHeader('content-type', 'application/json; charset=UTF-8');
+//    xhttp.setRequestHeader('content-type', 'application/json; charset=UTF-8');
+//    xhttp.send(JSON.stringify(['logs']));
 }
 
 function clear_cycles(){
@@ -31,5 +32,5 @@ function clear_cycles(){
         }
     };
     xhttp.open("POST", "/clear_cycles", true);
-    xhttp.setRequestHeader('content-type', 'application/json; charset=UTF-8');
+//    xhttp.setRequestHeader('content-type', 'application/json; charset=UTF-8');
 }
