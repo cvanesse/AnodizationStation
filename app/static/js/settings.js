@@ -5,11 +5,9 @@ function clear_logs(){
         if (this.readyState == 4) {
             if (this.status == 200) {
                 if (this.responseText == "Success") {
-                    setwaiting(cell_id);
-                    setTimeout(render_cellbox(cell_id), 15);
+                    alert("Logs Cleared!")
                 } else {
                     alert(this.responseText);
-                    setTimeout(render_cellbox(cell_id), 15);
                 }
             }
         }
@@ -25,11 +23,9 @@ function clear_cycles(){
         if (this.readyState == 4) {
             if (this.status == 200) {
                 if (this.responseText == "Success") {
-                    setwaiting(cell_id);
-                    setTimeout(render_cellbox(cell_id), 15);
+                    alert("Cycles Cleared!")
                 } else {
                     alert(this.responseText);
-                    setTimeout(render_cellbox(cell_id), 15);
                 }
             }
         }
