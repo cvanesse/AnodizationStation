@@ -1,5 +1,5 @@
 from .csvlog import CSVLog
-import datetime, base64, os, json
+import datetime, base64, os, json, shutil
 
 
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
@@ -30,7 +30,10 @@ class Logger:
 
             # Create an empty cycles.json file
             with open(os.path.join(LOGS_URL, 'logs.json'), 'a') as f:
-                f.writelines(json.dumps({}))
+                f.writelines(json.dumps([]))
+
+            with open(os.path.join(LOGS_URL, 'logs.json')) as f:
+                self.LOGS_INFO = json.load(f)
 
             return "Success"
         except:

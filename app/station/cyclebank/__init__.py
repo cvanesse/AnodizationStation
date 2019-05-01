@@ -77,6 +77,9 @@ class CycleBank:
             with open(os.path.join(CYCLES_URL, 'cycles.json'), 'a') as f:
                 f.writelines(json.dumps([]))
 
+            with open(os.path.join(CYCLES_URL, 'cycles.json')) as f:
+                self.CYCLE_INFO = json.load(f)
+
             return "Success"
         except:
             return "Fail"
