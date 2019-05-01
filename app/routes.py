@@ -80,7 +80,7 @@ def render_log_page():
     return render_template("logs.html", title=title, form=form)
 
 
-@FLASK_APP.route('/settings', methods=['GET', 'POST'])
+@FLASK_APP.route('/settings', methods=['GET'])
 def render_settings_page():
     title = "Settings"
     return render_template("settings.html", title=title)
