@@ -38,7 +38,6 @@ class Cycle:
             if not isinstance(self.args[cid], (bytes, str)):
                 a = [self.parameter_table[x] for x in self.args[cid]]
                 c(*a)
-                raise Exception(a)
             else:
                 try:
                     a = self.parameter_table[self.args[cid]]
