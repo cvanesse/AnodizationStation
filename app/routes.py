@@ -84,9 +84,8 @@ def render_log_page():
 def render_settings_page():
     title = "Settings"
 
-    if flask.request.method == 'POST':
+    if request.method == 'POST':
         info = request.get_json()
-        rmtype = info[0]
         if rmtype == 'logs':
             return STATION.LOGGER.clear_logs()
         elif rmtype == 'cycles':
