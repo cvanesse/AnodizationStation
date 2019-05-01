@@ -125,7 +125,7 @@ def kill_cell():
     while STATION.cell_handlers[cell_id].cell_process.is_alive():
         a = 1
 
-    if STATION.cell_handleers[cell_id].try_join():
+    if STATION.cell_handlers[cell_id].try_join():
         ret = "Success"
     else:
         ret = "Fail"
