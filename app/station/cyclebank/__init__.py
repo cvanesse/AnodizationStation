@@ -1,4 +1,4 @@
-import csv, glob, os, json, base64
+import csv, glob, os, json, base64, shutil
 from .cycle import Cycle
 
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
@@ -65,6 +65,22 @@ class CycleBank:
                         parameter_names.append(line2[col])
 
             return [display_name, parameter_names]
+
+    #Deletes all .cycle files and clears the JSON database
+    def clear_cycles(self):
+        try:
+            #Clears the Cycles Folder
+            shutil.rmtree(CYCLES_URL)
+            os.mkdir(CYCLES_URL)
+
+            #Create an empty cycles.json file
+            with open(os.path.join(CYCLES_URL, 'cycles.json'), 'a') as f:
+                f.writelines(json.dumps([]))
+
+            return "Success"
+        except:
+            return "Fail"
+
 
 
 # This turns the cycle_file into a list of commands and parameters bound to the correct objects

@@ -80,6 +80,12 @@ def render_log_page():
     return render_template("logs.html", title=title, form=form)
 
 
+@FLASK_APP.route('/settings', methods=['GET', 'POST'])
+def render_settings_page():
+    title = "Settings"
+    return render_template("settings.html", title=title)
+
+
 @FLASK_APP.route('/get_json', methods=['POST'])
 def get_json():
     vals = request.values
@@ -131,6 +137,16 @@ def kill_cell():
         ret = "Fail"
 
     return ret
+
+
+@FLASK_APP.route('/clear_cycles', methods=['POST'])
+def clear_cycles():
+    return STATION.CYCLEBANK.clear_cycles()
+
+
+@FLASK_APP.route('/clear_logs', methods=['POST'])
+def clear_logs():
+    return STATION.LOGGER.clear_logs()
 
 
 @FLASK_APP.route('/render', methods=['POST'])

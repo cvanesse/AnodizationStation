@@ -21,6 +21,21 @@ class Logger:
         with open(os.path.join(LOGS_URL, 'logs.json')) as f:
             self.LOGS_INFO = json.load(f)
 
+    # Deletes all .csv log files and clears the JSON database
+    def clear_logs(self):
+        try:
+            # Clears the Logs Folder
+            shutil.rmtree(LOGS_URL)
+            os.mkdir(LOGS_URL)
+
+            # Create an empty cycles.json file
+            with open(os.path.join(LOGS_URL, 'logs.json'), 'a') as f:
+                f.writelines(json.dumps({}))
+
+            return "Success"
+        except:
+            return "Fail"
+
 
 # This function adds log information to logs.json
 def add_log_to_database(file_info, name, date):
