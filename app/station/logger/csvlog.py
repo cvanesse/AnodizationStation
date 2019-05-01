@@ -27,11 +27,15 @@ class CSVLog:
             wr = csv.writer(f)
             wr.writerows(self.wq)
             self.wq = []
+            f.flush()
+            f.close()
 
     def write(self, row):
         with open(self.filepath, 'a') as f:
             wr = csv.writer(f)
             wr.writerow(row)
+            f.flush()
+            f.close()
 
     # This function creates a log filename which hasnt been used yet.
     def generate_log_filename(self):
