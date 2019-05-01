@@ -52,22 +52,28 @@ class Cell:
         self.keep_sensing = True
         sensor_thread.start()
 
-        for i in range(numcycles):
-            self.cycle_num = i + 1
-            self.cycle.run()
-            self.cell_pipe.send(i + 1)
-
-        self.keep_sensing = False
-        sensor_thread.join()
-
-        self.running_pin.setstate(0)
-
         # Add the log file to the database
         add_log_to_database({
             'file': self.log.filename,
             'user': self.user,
             'time': str(datetime.datetime.now())
         }, self.name, datetime.datetime.now().strftime("%Y-%m-%d"))
+
+        #Run the cycle the specified number of times
+        for i in range(numcycles):
+            if self.die:
+                break
+            self.cycle_num = i + 1
+            self.cycle.run()
+            self.cell_pipe.send(i + 1)
+
+        #Tell the sensing thread to stop, then rejoin the sensor thread
+        self.keep_sensing = False
+        sensor_thread.join()
+
+        #Short the cell output, and set the running pin to 0, to ensure safe shutdown.
+        self.set_bus_state('S')
+        self.running_pin.setstate(0)
 
     # The loop run on the designated sensing thread
     # The sensing thread handles reading sensors and checking for a kill signal from the CellHandler
