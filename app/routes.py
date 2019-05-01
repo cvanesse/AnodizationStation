@@ -85,13 +85,15 @@ def render_settings_page():
     title = "Settings"
 
     if request.method == 'POST':
-        info = request.get_json()
+        rmtype = request.get_json()
         if rmtype == 'logs':
             return STATION.LOGGER.clear_logs()
         elif rmtype == 'cycles':
             return STATION.CYCLEBANK.clear_cycles()
-
-    return render_template("settings.html", title=title)
+        else:
+            raise Exception(rmtype)
+    else:
+        return render_template("settings.html", title=title)
 
 
 @FLASK_APP.route('/get_json', methods=['POST'])
