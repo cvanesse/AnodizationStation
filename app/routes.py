@@ -80,9 +80,18 @@ def render_log_page():
     return render_template("logs.html", title=title, form=form)
 
 
-@FLASK_APP.route('/settings', methods=['GET'])
+@FLASK_APP.route('/settings', methods=['GET', 'POST'])
 def render_settings_page():
     title = "Settings"
+
+    if flask.request.method == 'POST':
+        info = request.get_json()
+        rmtype = info[0]
+        if rmtype == 'logs':
+            return STATION.LOGGER.clear_logs()
+        elif rmtype == 'cycles':
+            return STATION.CYCLEBANK.clear_cycles()
+
     return render_template("settings.html", title=title)
 
 
