@@ -23,13 +23,13 @@ class CSVLog:
         self.wq.append(row)
 
     def write_queue(self):
-        with open(self.filepath, 'w') as f:
+        with open(self.filepath, 'a') as f:
             wr = csv.writer(f)
             wr.writerows(self.wq)
             self.wq = []
 
     def write(self, row):
-        with open(self.filepath, 'w') as f:
+        with open(self.filepath, 'a') as f:
             wr = csv.writer(f)
             wr.writerow(row)
 
