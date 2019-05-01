@@ -115,6 +115,23 @@ def run_cell():
     return STATION.cell_handlers[cell_id].run()
 
 
+@FLASK_APP.route('/kill_cell', methods=['POST'])
+def kill_cell():
+    info = request.get_json()
+    cell_id = info['cell_id']
+
+    STATION.cell_handlers[cell_id].kill()
+
+    while STATION.cell_handlers[cell_id].cell_process.is_alive():
+
+    if STATION.cell_handleers[cell_id].try_join():
+        ret = "Success"
+    else:
+        ret = "Fail"
+
+    return ret
+
+
 @FLASK_APP.route('/render', methods=['POST'])
 def do_render():
     info = request.get_json()

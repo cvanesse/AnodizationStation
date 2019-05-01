@@ -41,6 +41,32 @@ function run_cell(cell_id) {
     xhttp.send(JSON.stringify(info));
 }
 
+
+function kill_cell(cell_id) {
+    var info = {
+        "cell_id": cell_id
+    };
+
+    // Asynchronously tell the server to start the cell, then update the cellbox
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                if (this.responseText == "Success") {
+                    setwaiting(cell_id);
+                    setTimeout(render_cellbox(cell_id), 15);
+                } else {
+                    alert(this.responseText);
+                    setTimeout(render_cellbox(cell_id), 15);
+                }
+            }
+        }
+    };
+    xhttp.open("POST", "/kill_cell", true);
+    xhttp.setRequestHeader('content-type', 'application/json; charset=UTF-8');
+    xhttp.send(JSON.stringify(info));
+}
+
 function render_cellbox(cell_id) {
     // Asynchronously fetch the rendered HTML for this cell_id
     xhttp = new XMLHttpRequest();

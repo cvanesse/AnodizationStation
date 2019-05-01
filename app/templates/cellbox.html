@@ -1,6 +1,12 @@
 <!--- This is for a cell which is currently running. -->
 {% macro cell_running(cell_id, cell_config, cell_handler) %}
     <h3 id="status_{{cell_id}}">Running: {{ cell_handler.check_cell() }} / {{ cell_handler.num_cycles }} Cycles</h3>
+    <hr>
+    <div class="centered-form">
+        <div class="form-element">
+            <input type="submit" value="Kill" onclick=kill_cell({{ cell_id }})>
+        </div>
+    </div>
 {% endmacro %}
 
 <!--- This is for a cell which is not currently running -->
