@@ -30,7 +30,7 @@ class Logger:
 
             # Create an empty cycles.json file
             with open(os.path.join(LOGS_URL, 'logs.json'), 'a') as f:
-                f.writelines(json.dumps([]))
+                f.writelines(json.dumps({}))
 
             with open(os.path.join(LOGS_URL, 'logs.json')) as f:
                 self.LOGS_INFO = json.load(f)
