@@ -17,11 +17,15 @@ class Cycle:
                 self.addcommand(cell.time_delay, call_args)
             elif call_name == 'charge_delay':
                 self.addcommand(cell.charge_delay, call_args)
-            elif call_name == 'set_bus_state':
+            elif call_name == 'set_state':
                 self.addcommand(cell.set_bus_state, call_args)
             elif call_name == 'increment':
+                #The first argument is the name of the parameter to increment
+                #Swap this out with a parameter in the table
                 self.parameter_table['i' + str(cid)] = call_args[0]
                 call_args[0] = 'i' + str(cid)
+
+                #Add a command which increments the desired parameter by the desired amount
                 self.addcommand(self.increment_argument, call_args)
 
     def addcommand(self, command, arguments):
