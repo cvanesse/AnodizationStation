@@ -46,4 +46,4 @@ class Cycle:
                     raise Exception([self.call_names[cid], self.args[cid]])
 
     def increment_argument(self, name, incr):
-        self.parameter_table[name] = self.parameter_table[name] + float(incr)
+        self.parameter_table[name] = str(float(self.parameter_table[name]) + float(incr))
