@@ -3,6 +3,7 @@ from .logger import CSVLog, add_log_to_database
 from .pisense import CurrentSensor, DigiPinSensor
 import time, datetime
 from threading import Thread
+from werkzeug.utils import secure_filename
 
 
 # The Cell should be created within the same subprocess that runs Cell.run_cycle
@@ -33,7 +34,7 @@ class Cell:
         #self.button = DigiPinSensor(cell_config['button_pin'])
         self.ina_address = cell_config['ina_address']
         #self.button.add_callback(self.kill)
-        self.log = CSVLog(tagnames=self.tag_names)
+        self.log = CSVLog(filename=secure_filename(name), tagnames=self.tag_names)
         self.current_sensor = CurrentSensor(self.ina_address)
         self.cell_pipe = cellpipe
         self.cell_pipe.send(0)
