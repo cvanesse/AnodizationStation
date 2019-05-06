@@ -10,7 +10,9 @@ class CSVLog:
 
     def __init__(self, filename=None, tagnames=None):
         if filename is not None:
-            self.filename = filename + "_" + self.generate_log_filename + ".csv"
+            self.filename = filename + "_"
+            self.filename = self.filename + self.generate_log_filename()
+            self.filename = self.filename + ".csv"
         else:
             self.filename = self.generate_log_filename()
 
